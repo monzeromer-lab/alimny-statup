@@ -20,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/monzersmiledev/alimny-statup/issues"
   },
-  "homepage": "https://github.com/monzersmiledev/alimny-statup#readme"
+  "homepage": "https://github.com/monzersmiledev/alimny-statup#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "joi": "^17.5.0",
+    "mysql2": "^2.3.3"
+  }
 }
