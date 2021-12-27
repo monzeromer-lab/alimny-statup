@@ -5,7 +5,9 @@ const {
     bcrypt = require("bcrypt"),
     database = require("../database/connection"), {
         generateAccessToken
-    } = require("../auth/accessToken")
+    } = require("../auth/accessToken"),
+    crypto = require("crypto"),
+    mailService = require("../service/emailVervication")
 
 module.exports.register = async (req, res, next) => {
     //get the body data
@@ -18,6 +20,8 @@ module.exports.register = async (req, res, next) => {
         state,
         age
     } = req.body
+
+    let verficationCode = crypto.randomBytes(6).toString("hex")
 
     //validate the body
     let validationTest = registerSchema.validate(req.body, {
@@ -61,14 +65,16 @@ module.exports.register = async (req, res, next) => {
                         if (err)
                             next(err)
                         try {
-                            let [insert, issuse] = await database.query(`INSERT INTO user (first_name, last_name, phone_number, password, email, state, age) VALUES ("${firstName}", "${lastName}", "${phoneNumber}", "${hashed}", "${email}", "${state}", "${age}")`)
-                            res.status(200).json({
-                                error: {
-                                    state: false
-                                },
-                                message: "success",
-                                data: [insert]
-                            })
+                            let [insert, issuse] = await database.query(`INSERT INTO user (first_name, last_name, phone_number, password, email, state, age, verification_code) VALUES ("${firstName}", "${lastName}", "${phoneNumber}", "${hashed}", "${email}", "${state}", "${age}", "${verficationCode}")`)
+                            mailService("info@alimny.org", email, verficationCode)
+                                res.status(200).json({
+                                    error: {
+                                        state: false
+                                    },
+                                    message: "success",
+                                    data: [insert]
+                                })
+
                         } catch (error) {
                             next(err)
                         }
