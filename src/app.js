@@ -8,16 +8,20 @@ app.use(express.json())
         extended: false
     }))
 
+// setup the routers
+// user routers
+app.use("/", require("./router/user.router"))
+
 //error handeler
 app.use((err, req, res, next) => {
     if (err) {
         res.status(500).json({
             error: {
                 state: true,
-                errorCode: err.code,
+                errorCode: 500,
                 message: err
             },
-            message: err.message,
+            message: "server error",
             data: []
         })
     }

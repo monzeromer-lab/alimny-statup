@@ -9,7 +9,7 @@ const mysql = require("mysql2/promise"),
 
 
 // test database
-const database = mysql.createPool({
+const db = mysql.createPool({
     host,
     user,
     password,
@@ -26,4 +26,4 @@ const database = mysql.createPool({
 //     connectionLimit
 // });
 
-module.exports = database
+module.exports = db
