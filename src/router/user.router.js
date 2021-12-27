@@ -1,23 +1,17 @@
 const express = require("express"),
     user_router = express.Router(),
     {
-        register
+        register,
+        login
     } = require("../controller/userController"),
     database = require("../database/connection"),
     {
         authenticateToken
-    } = require("../auth/accessToken"),
-    {
-        registerSchema
-    } = require("../validition/userSchema"),
-    bcrypt = require("bcrypt")
+    } = require("../auth/accessToken")
 
-user_router.post("/profile/login", (req, res, next) => {
-
-
-    })
+user_router.post("/profile/login", login)
     .post("/profile/register", register)
-    .put("/profile/update", authenticateToken, (req, res, next) => {
+    .put("/profile/update/:id", authenticateToken, (req, res, next) => {
 
     })
 

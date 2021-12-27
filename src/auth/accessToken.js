@@ -26,8 +26,8 @@ module.exports.authenticateToken = (req, res, next) => {
   })
 }
 
-module.exports.generateAccessToken = (username) => {
-  return jwt.sign(username, process.env.TOKEN_SECRET, {
-    expiresIn: '1800s'
+module.exports.generateAccessToken = (data) => {
+  return jwt.sign(data, process.env.TOKEN_SECRET, {
+    expiresIn: '90 days'
   });
 }

@@ -15,3 +15,8 @@ module.exports.registerSchema = Joi.object({
     age: Joi.number().integer().min(3).required(),
     state: Joi.string().required()
 })
+
+module.exports.loginSchema = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().alphanum().required()
+})
