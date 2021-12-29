@@ -4,7 +4,6 @@ const express = require("express"),
         register,
         login
     } = require("../controller/userController"),
-    database = require("../database/connection"),
     {
         authenticateToken
     } = require("../auth/accessToken")

@@ -7,7 +7,12 @@ const {
         generateAccessToken
     } = require("../auth/accessToken"),
     crypto = require("crypto"),
-    mailService = require("../service/emailVervication")
+    mailService = require("../service/emailVervication"), {
+        getUserEmail,
+        saveUserProfile,
+        getUserByEmail
+    } = require("../service/userService"),
+    hash_password = require("../auth/hashPassword")
 
 module.exports.register = async (req, res, next) => {
     //get the body data
@@ -41,56 +46,75 @@ module.exports.register = async (req, res, next) => {
             data: []
         })
     } else {
-        try {
-            // check if the email is already used
-            let [rows, fields] = await database.query(`SELECT email FROM user WHERE email = "${email}"`)
 
-            if (rows.length >= 1) {
-                res.status(403).json({
-                    error: {
-                        state: true,
-                        errorCode: 403,
-                        errorMessage: "email already used",
-                        errors: []
-                    },
-                    message: "use another email",
-                    data: []
+        // check if the email is already used
+        let rows = await getUserEmail(email, next)
+
+        console.log(rows, "user email");
+        // if the email is used response with 403
+        if (rows.length >= 1) {
+            res.status(403).json({
+                error: {
+                    state: true,
+                    errorCode: 403,
+                    errorMessage: "email already used",
+                    errors: []
+                },
+                message: "use another email",
+                data: []
+            })
+
+            // if the email isn't used register the user
+        } else {
+
+            // hash the password
+            hash_password(password).then(async (hashedPassword) => {
+                console.log(hashedPassword);
+                // save the user profile
+                let insert = await saveUserProfile({
+                    firstName,
+                    lastName,
+                    phoneNumber,
+                    hashedPassword,
+                    email,
+                    state,
+                    age
+                }, verficationCode, next)
+                console.log(insert, "user saved");
+                let token = generateAccessToken({
+                    email,
+                    firstName,
+                    lastName,
+                    age
                 })
-            } else {
-                bcrypt.genSalt(10, (err, salt) => {
-                    if (err)
-                        next(err)
-
-                    bcrypt.hash(password, salt, async (err, hashed) => {
-                        if (err)
-                            next(err)
-                        try {
-                            let [insert, issuse] = await database.query(`INSERT INTO user (first_name, last_name, phone_number, password, email, state, age, verification_code) VALUES ("${firstName}", "${lastName}", "${phoneNumber}", "${hashed}", "${email}", "${state}", "${age}", "${verficationCode}")`)
-                            mailService("info@alimny.org", email, verficationCode)
-                                res.status(200).json({
-                                    error: {
-                                        state: false
-                                    },
-                                    message: "success",
-                                    data: [insert]
-                                })
-
-                        } catch (error) {
-                            next(err)
-                        }
-
-
+                // send the verification code to the user if there's error response with 403 to change the email later
+                mailService(email, verficationCode).then((success) => {
+                    res.status(403).header("Authorization", `Bearer ${token}`).json({
+                        error: {
+                            state: false
+                        },
+                        message: "successfully registered!",
+                        data: [insert]
+                    })
+                }).catch((error) => {
+                    res.status(403).header("Authorization", `Bearer ${token}`).json({
+                        error: {
+                            state: true,
+                            errorCode: 403,
+                            errorMessage: "email verification code did't sent",
+                            errors: [error]
+                        },
+                        message: "successfully registered but please check your email",
+                        data: [insert]
                     })
                 })
+            }).catch((err) => {
+                next(err)
+            })
 
-            }
 
-        } catch (error) {
-            next(error)
         }
     }
-
-
 }
 
 module.exports.login = async (req, res, next) => {
@@ -117,77 +141,75 @@ module.exports.login = async (req, res, next) => {
                 errorMessage: "body errors",
                 errors: validationTest
             },
-            message: "try request isn't valid",
+            message: "try again, request body isn't valid",
             data: []
         })
     } else {
-        try {
-            //if valid check if the email is available
-            let [rows, fields] = await database.query(`SELECT email FROM user WHERE email = "${email}"`)
 
-            if (rows.length >= 1) {
+        //if valid check if the email is available
+        let rows = await getUserEmail(email, next)
 
-                // if valid get the user data and compare the stored password with the entered one
-                let [user, errors] = await database.query(`SELECT email, password, first_name, last_name, age  FROM user WHERE email = "${email}"`)
+        // if the email is correct
+        if (rows.length >= 1) {
 
-                if (user) {
-                    let compareResult = await bcrypt.compare(password, user[0].password)
+            // if valid get the user data and compare the stored password with the entered one
+            let user = await getUserByEmail(email, next)
 
-                    // if correct then login the user
-                    if (compareResult) {
+            // compare the password with the stored one
+            let compareResult = await bcrypt.compare(password, user[0].password)
 
-                        // generate new token
-                        let token = generateAccessToken(user[0])
+            // if correct then login the user
+            if (compareResult) {
 
-                        // response with 200 and the token in header
-                        res.status(200).header("Authorization", `Bearer ${token}`).json({
-                            error: {
-                                state: false
-                            },
-                            message: "successfully logged in!",
-                            data: []
-                        })
+                // generate new token
+                let token = generateAccessToken({
+                    email: user[0].email,
+                    first_name: user[0].first_name,
+                    last_name: user[0].last_name,
+                    age: user[0].age
+                })
 
-                        // if not correct response with 403 and password error 
-                    } else {
-                        res.status(403).json({
-                            error: {
-                                state: true,
-                                errorCode: 403,
-                                errorMessage: "password is wrong!",
-                                errors: [{
-                                    atField: "password"
-                                }]
-                            },
-                            message: "try again",
-                            data: []
-                        })
-                    }
-                }
+                // response with 200 and the token in header
+                res.status(200).header("Authorization", `Bearer ${token}`).json({
+                    error: {
+                        state: false
+                    },
+                    message: "successfully logged in!",
+                    data: []
+                })
 
-
-
-
+                // if the password is incorrect response with 403 and password error 
             } else {
-
-                // if the email isn't available response with 403 and email error
                 res.status(403).json({
                     error: {
                         state: true,
                         errorCode: 403,
-                        errorMessage: "email is wrong!",
+                        errorMessage: "password is wrong!",
                         errors: [{
-                            atField: "email"
+                            atField: "password"
                         }]
                     },
                     message: "try again",
                     data: []
                 })
             }
-        } catch (error) {
-            next(error)
-        }
 
+        } else {
+
+            // if the email isn't available response with 403 and email error
+            res.status(403).json({
+                error: {
+                    state: true,
+                    errorCode: 403,
+                    errorMessage: "email is wrong!",
+                    errors: [{
+                        atField: "email"
+                    }]
+                },
+                message: "try again",
+                data: []
+            })
+        }
 
     }
 
