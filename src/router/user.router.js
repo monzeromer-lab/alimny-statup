@@ -17,5 +17,8 @@ user_router.post("/profile/login", login)
     .post("/profile/register", register)
     .put("/profile/update/:id", authenticateToken, update)
     .get("/profile/verify/:code", activeAccount)
+    .get("/profile/signup", authenticateToken, (req, res, next) => {
+        
+    })
 
 module.exports = user_router

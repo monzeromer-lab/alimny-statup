@@ -52,7 +52,6 @@ module.exports.register = async (req, res, next) => {
         // check if the email is already used
         let rows = await getUserEmail(email, next)
 
-        console.log(rows, "user email");
         // if the email is used response with 403
         if (rows.length >= 1) {
             res.status(403).json({
@@ -71,7 +70,7 @@ module.exports.register = async (req, res, next) => {
 
             // hash the password
             hash_password(password).then(async (hashedPassword) => {
-                console.log(hashedPassword);
+
                 // save the user profile
                 let insert = await saveUserProfile({
                     firstName,
@@ -82,7 +81,7 @@ module.exports.register = async (req, res, next) => {
                     state,
                     age
                 }, verficationCode, next)
-                console.log(insert, "user saved");
+
                 let token = generateAccessToken({
                     email,
                     firstName,
@@ -149,10 +148,10 @@ module.exports.login = async (req, res, next) => {
     } else {
 
         //if valid check if the email is available
-        let rows = await getUserEmail(email, next)
-
+        let user_email = await getUserEmail(email, next)
+        console.log(user_email);
         // if the email is correct
-        if (rows.length >= 1) {
+        if (user_email.length >= 1) {
 
             // if valid get the user data and compare the stored password with the entered one
             let user = await getUserByEmail(email, next)
@@ -217,7 +216,7 @@ module.exports.login = async (req, res, next) => {
 
 }
 
-module.exports.update =  async (req, res, next) => {
+module.exports.update = async (req, res, next) => {
     // get the body values
     let {
         state = undefined,
@@ -277,7 +276,7 @@ module.exports.activeAccount = async (req, res, next) => {
 
     if (verificationCode >= 1) {
         let active_account = await activeAccount(verificationCode[0].id)
-        if(active_account >= 1){
+        if (active_account >= 1) {
             res.status(200).json({
                 error: {
                     state: false
@@ -292,7 +291,9 @@ module.exports.activeAccount = async (req, res, next) => {
                 state: true,
                 errorCode: 404,
                 errorMessage: "Code isn't correct or not valid",
-                errors: [{atParam: "code"}]
+                errors: [{
+                    atParam: "code"
+                }]
             },
             message: "please check your email for a valid code",
             data: verificationCode

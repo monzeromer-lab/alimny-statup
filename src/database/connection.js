@@ -5,7 +5,8 @@ const mysql = require("mysql2/promise"),
         password,
         database,
         connectionLimit
-    } = require("../../config").database
+    } = require("../../config").database,
+    http = require("http")
 
 
 // test database
@@ -15,6 +16,12 @@ const db = mysql.createPool({
     password,
     database,
     connectionLimit
+})
+
+db.getConnection().then((success) => {
+    console.log(success.threadId);
+}).catch((error) => {
+    throw new Error(error)
 })
 
 // production database
