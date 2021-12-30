@@ -4,7 +4,8 @@ const express = require("express"),
         register,
         login,
         update,
-        activeAccount
+        active_account,
+        signup_page_info
     } = require("../controller/userController"),
     {
         authenticateToken
@@ -16,9 +17,7 @@ const express = require("express"),
 user_router.post("/profile/login", login)
     .post("/profile/register", register)
     .put("/profile/update/:id", authenticateToken, update)
-    .get("/profile/verify/:code", activeAccount)
-    .get("/profile/signup", authenticateToken, (req, res, next) => {
-        
-    })
+    .get("/profile/verify/:code", active_account)
+    .get("/profile/signup", authenticateToken, signup_page_info)
 
 module.exports = user_router

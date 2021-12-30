@@ -265,7 +265,7 @@ module.exports.update = async (req, res, next) => {
 
 }
 
-module.exports.activeAccount = async (req, res, next) => {
+module.exports.active_account = async (req, res, next) => {
     // get verification code
     let {
         code
@@ -299,4 +299,21 @@ module.exports.activeAccount = async (req, res, next) => {
             data: verificationCode
         })
     }
+}
+
+module.exports.signup_page_info =  (req, res, next) => {
+    let {
+        email,
+        firstName,
+        lastName,
+        age
+    } = req.user
+
+    res.status(200).json({
+        error: {
+            state: false
+        },
+        message: "successfully registered!",
+        data: [{full_name: `${firstName}${lastName}`, email, age}]
+    })
 }
