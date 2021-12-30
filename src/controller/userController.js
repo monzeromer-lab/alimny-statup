@@ -1,6 +1,7 @@
 const {
     registerSchema,
-    loginSchema
+    loginSchema,
+    updateSchema
 } = require("../validition/userSchema"),
     bcrypt = require("bcrypt"),
     database = require("../database/connection"), {
@@ -10,7 +11,8 @@ const {
     mailService = require("../service/emailVervication"), {
         getUserEmail,
         saveUserProfile,
-        getUserByEmail
+        getUserByEmail,
+        updateUser
     } = require("../service/userService"),
     hash_password = require("../auth/hashPassword")
 
@@ -212,5 +214,54 @@ module.exports.login = async (req, res, next) => {
         }
 
     }
+
+}
+
+module.exports.update =  async (req, res, next) => {
+    // get the body values
+    let {
+        state = undefined,
+            age = undefined,
+            phoneNumber = undefined,
+            lastName = undefined,
+            firstName = undefined,
+            bio = undefined
+
+    } = req.body
+
+    // get url params
+    let {
+        id
+    } = req.params
+
+    //valedate the body
+    updateSchema.validate({
+        state,
+        age,
+        phoneNumber,
+        lastName,
+        firstName,
+        bio
+    }, {
+        abortEarly: false
+    })
+
+    // save the new data
+    let updateState = await updateUser({
+        state,
+        age,
+        phoneNumber,
+        lastName,
+        firstName,
+        bio
+    }, next, id)
+
+    res.status(201).json({
+        error: {
+            state: false
+        },
+        message: "successfully updated!",
+        data: [updateState]
+    })
 
 }
