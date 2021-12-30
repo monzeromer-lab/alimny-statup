@@ -265,3 +265,37 @@ module.exports.update =  async (req, res, next) => {
     })
 
 }
+
+module.exports.activeAccount = async (req, res, next) => {
+    // get verification code
+    let {
+        code
+    } = req.params
+
+    // get the code from the database
+    let verificationCode = await getVerificationCode(code, next)
+
+    if (verificationCode >= 1) {
+        let active_account = await activeAccount(verificationCode[0].id)
+        if(active_account >= 1){
+            res.status(200).json({
+                error: {
+                    state: false
+                },
+                message: "account activated successfully",
+                data: active_account
+            })
+        }
+    } else {
+        res.status(403).json({
+            error: {
+                state: true,
+                errorCode: 404,
+                errorMessage: "Code isn't correct or not valid",
+                errors: [{atParam: "code"}]
+            },
+            message: "please check your email for a valid code",
+            data: verificationCode
+        })
+    }
+}

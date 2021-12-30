@@ -35,3 +35,21 @@ module.exports.updateUser = async function (data, next, id) {
         return next(error)
     }
 }
+
+module.exports.getVerificationCode = async function(verificationCode, next) {
+    try {
+        let [code, errors] = await database.query(`SELECT verification_code, id FROM user WHERE verification_code = ${verificationCode}`)
+        return code
+    } catch (error) {
+        return next(error)
+    }
+}
+
+module.exports.activeAccount = async function(id){
+    try {
+        let [state, errors] = await database.query(`UPDATE user SET verified = 1`)
+        return state
+    } catch (error) {
+        return next(error)
+    }
+}

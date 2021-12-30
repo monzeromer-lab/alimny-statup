@@ -3,14 +3,19 @@ const express = require("express"),
     {
         register,
         login,
-        update
+        update,
+        activeAccount
     } = require("../controller/userController"),
     {
         authenticateToken
-    } = require("../auth/accessToken")
+    } = require("../auth/accessToken"),
+    {
+        getVerificationCode
+    } = require("../service/userService")
 
 user_router.post("/profile/login", login)
     .post("/profile/register", register)
     .put("/profile/update/:id", authenticateToken, update)
+    .get("/profile/verify/:code", activeAccount)
 
 module.exports = user_router

@@ -24,7 +24,7 @@ module.exports = function (to, verficationCode) {
         from: process.env.EMAIL,
         to: to,
         subject: "Verify Your Email!",
-        text: `please verify your account using this link: \n http://localhost:3023/verify/${verficationCode}`
+        text: `please verify your account using this link: \n http://localhost:3023/profile/verify/${verficationCode}`
     }
     return new Promise((resolve, reject) => {
         smtpTransport.sendMail(mailOptions, function (error, info) {
