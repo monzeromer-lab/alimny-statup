@@ -3,16 +3,17 @@ const {
     loginSchema,
     updateSchema
 } = require("../validition/userSchema"),
-    bcrypt = require("bcrypt"),
-    database = require("../database/connection"), {
+    bcrypt = require("bcrypt"), {
         generateAccessToken
     } = require("../auth/accessToken"),
-    crypto = require("crypto"),
-    mailService = require("../service/emailVervication"), {
+    crypto = require("crypto"), {
+        verificationEmail
+    } = require("../service/mailVerification"), {
         getUserEmail,
         saveUserProfile,
         getUserByEmail,
-        updateUser
+        updateUser,
+        activeAccount
     } = require("../service/userService"),
     hash_password = require("../auth/hashPassword")
 
@@ -89,7 +90,7 @@ module.exports.register = async (req, res, next) => {
                     age
                 })
                 // send the verification code to the user if there's error response with 403 to change the email later
-                mailService(email, verficationCode).then((success) => {
+                verificationEmail(email, verficationCode).then((success) => {
                     res.status(403).header("Authorization", `Bearer ${token}`).json({
                         error: {
                             state: false
@@ -112,8 +113,6 @@ module.exports.register = async (req, res, next) => {
             }).catch((err) => {
                 next(err)
             })
-
-
         }
     }
 }
@@ -301,7 +300,7 @@ module.exports.active_account = async (req, res, next) => {
     }
 }
 
-module.exports.signup_page_info =  (req, res, next) => {
+module.exports.signup_page_info = (req, res, next) => {
     let {
         email,
         firstName,
@@ -314,6 +313,10 @@ module.exports.signup_page_info =  (req, res, next) => {
             state: false
         },
         message: "successfully registered!",
-        data: [{full_name: `${firstName}${lastName}`, email, age}]
+        data: [{
+            full_name: `${firstName}${lastName}`,
+            email,
+            age
+        }]
     })
 }
