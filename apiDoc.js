@@ -117,7 +117,8 @@ let res4 = [{
     student_enrolled: Number,
     instrucre: String,
     price: Number,
-    profile: URL,
+    cover: URL,
+    introduction: URL,
     about: String,
     lectures: Number,
     downloadable_res: Number,
@@ -132,12 +133,13 @@ let res4 = [{
     }],
     instrucre: {
         id: Number,
+        profile: URL,
         name: String,
         postion: String,
         total_learners: Number,
         courses_count: Number
     },
-    reviews:[{
+    reviews: [{
         id: Number,
         rate: Number,
         user_name: String,
@@ -146,7 +148,7 @@ let res4 = [{
     }],
     intersted: [{
         course_id: Number,
-        Profile: URL,
+        cover: URL,
         name: String,
         instrucre: String,
         rate: Number + "will be genrated for all the rate's in the database",
@@ -171,7 +173,8 @@ let ex_res4 = [{
     student_enrolled: 9124242,
     instrucre: "Mohammed Ali",
     price: 4300,
-    media: "/public/images/IMG-8923752389.png",
+    cover: "/public/images/IMG-8923752389.png",
+    intro: "/public/images/IMG-8923752389.video",
     about: "Just an example of a desreption ",
     lectures: 17,
     downloadable_res: 219,
@@ -179,25 +182,26 @@ let ex_res4 = [{
     what_will_learn: [{
         id: 1,
         body: "AI"
-    },{
+    }, {
         id: 2,
         body: "something"
     }],
     requirements: [{
         id: 1,
         body: "Iv'e no idea"
-    },{
+    }, {
         id: 2,
         body: "Iv'e no idea 2"
     }],
     instrucre: {
         id: 1312,
+        profile: "/public/images/IMG-8923752389.png",
         name: "Mohammed Ali",
         postion: "Senior Blah Blah Blah",
         total_learners: 2342345,
         courses_count: 21
     },
-    reviews:[{
+    reviews: [{
         id: 2452,
         rate: 5,
         user_name: "Khlalid al3ajeeb",
@@ -206,7 +210,7 @@ let ex_res4 = [{
     }],
     intersted: [{
         course_id: 1242424,
-        Profile: "/public/images/IMG-2389572348.jpg",
+        cover: "/public/images/IMG-2389572348.jpg",
         name: "ML API's",
         instrucre: "Ali Ammar",
         rate: 4.5,
@@ -226,6 +230,8 @@ let res5 = [{
     course_photo: URL,
     course_intructre: String,
     total_lectures: Number,
+    // i don't understand what you mean about finished_lec
+    // how i can know where the user stopped in the course i mean the lecture he watched.. Monzer Said
     finished_lec: "ummm didn't know how to solve this but maybe with counting all the rows? no this is bad then how..? maybe with create a m to m table shows me this.."
 }]
 
@@ -276,7 +282,7 @@ let res6 = [{
 
 let res7 = [{
     note: {
-        id:Number,
+        id: Number,
         name: String,
         body: String
     }
@@ -343,3 +349,165 @@ let res9 = [{
 
 // waiting for your review..
 // and you can add how you will send the data to me and i'll edit it as i think it could be better..
+
+/**
+ * Below how the post'll be..
+ * 
+ * to AL_Monzer!
+ */
+
+// post singup
+// POST /profile/signup
+
+let user = {
+    name: 'str',
+    phone: 'str -the (+) in (+249) type str!-', // that's exactly what i was a fred of
+    site: 'str', // site????  what is this?
+    email: 'str',
+    password: 'str',
+    age: Date // also can make it str // will it's actully string
+}
+
+// post login
+// POST /profile/login
+
+let user = {
+    email: 'str',
+    password: 'str',
+}
+
+// post settings
+//  so we also need to get this which means there's two endpoints here on is GET the other is POST
+// PUT for update 
+// GET for get all the data
+
+// GET || PUT /profile/settings
+// Header: token
+let settings = {
+    first_name: "",
+    last_name: "",
+    bio: "",
+    links: {
+        facebook: '',
+        twitter: '',
+        linkedin: '',
+        youtube: '',
+    },
+    profile_pic: Blob, // I've no idea what blob is but anyway i agree with it
+    email: "",
+    specialist: "",
+    phone_number: "",
+}
+
+// post course info (add course)
+// POST /course/new
+// Header: token
+let course_info = {
+    catolgy: '',
+    sub_catolgy: '',
+    course_name: '',
+    student_learn: [],
+    requirements: [],
+    price: number,
+    level: '',
+    cover_pic: Blob,
+    Induction: video /* i don't know what is type that it shoud be send in it*/ , // it's a file btw
+    salutatory_msg: '',
+    congratulate_msg: '',
+    cupon: {
+        code: "",
+        discount_per: number,
+        exp: number
+    }
+}
+
+// update course info (edit course)
+// PUT /course/{course id}
+// Header: token
+let course_info = {
+    course_id: number,
+    catolgy: '',
+    sub_catolgy: '',
+    course_name: '',
+    student_learn: [],
+    requirements: [],
+    price: number,
+    level: '',
+    cover_pic: Blob,
+    Induction: video /* i don't know what is type that it shoud be send in it*/ , // it's a file Hamdi :-\
+    salutatory_msg: '',
+    congratulate_msg: '',
+    cupon: {
+        code: "",
+        discount_per: number,
+        exp: number
+    }
+}
+
+// post new section
+// POST /course/section/
+// Header: token
+let section = {
+    course_id: number,
+    section_name: '',
+    section_dec: ''
+}
+
+// POST /course/section/lecture   ??is the a good one?
+// post leactures||sections Huh??? are you actully posting the sections with it's lectures and with it's practise tests again!?
+// do you actully mean only one section
+// only one lecture?
+// and only one practise test??
+// i thing thats what you mean? if yes IT IS OKAY :-)..
+// Header: token
+let sections = {
+    course_id: number,
+    sections: [{
+        section_id: number,
+        section_name: "",
+        section_desc: "",
+        lecture: [{
+            lecture_id: number,
+            lecture_name: "",
+            lecture_desc: "",
+            lecture_links: [""],
+            practice_test: [{
+                test_question: "",
+                choices: [""],
+                answer_num: 0
+            }]
+        }]
+    }]
+}
+/**
+ * as we agreed in whatsapp 
+ * sending this data should be like:
+ */
+let lecturess = [{
+    course_id: Number, // refrense the course that this lecture should be uploaded to
+    section_id: Number, // refrense the section that this lecture should be uploaded to
+    lecture_id: Number,
+    lecture_name: "",
+    lecture_desc: "",
+    lecture_links: [""] // also what is this for???
+}]
+
+
+let practice_test = [{
+    course_id: Number, // refrense the course that this lecture should be uploaded to
+    lecture_id: Number, // refrense the lecture that this lecture should be uploaded to
+    test_question: String,
+    choices: [{
+        name: String,
+        number: Number
+    }],
+    correct_answer_num: Number // refrence the correct answer num
+}]
+
+// post files we debated in whatsapp but i have a small subjoinder.. (And yes I don't actully remember "Monzer")
+// leacture files after send it i need they urls in array if you don't mind 
+// i didn't get this.. Monzer Said
+// are you gonna post all the files together and need there links as a response?
+// i can do that for you..
+
+// anyway we talked to much here LOL
