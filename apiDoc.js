@@ -7,8 +7,12 @@
  * to Hamdi!
  */
 
-import { blob } from "stream/consumers"
-import { number } from "yup"
+import {
+    blob
+} from "stream/consumers"
+import {
+    number
+} from "yup"
 
 /**
  * first of all
@@ -540,7 +544,7 @@ let lecure = {
 }
 
 // delete lecure file
-//
+// DELETE /course/{course id}/lecture/{lecture id}/file/{file id}
 // Header: token
 let lecure = {
     course_id: number,
@@ -552,49 +556,71 @@ let lecure = {
 // post files we debated in whatsapp but i have a small subjoinder.. (And yes I don't actully remember "Monzer")
 
 // post profile_pic
-//
+// POST /profile/picture
 // Heder: token
-let pic = {Blob}
+let pic = {
+    Blob
+}
 
 // post course cover
-//
+// POST /course/{course id}/cover
 // Heder: token
 let course_cover = {
-    course_id: number,
     course_cover: Blob
 }
 
 // post course intro
-//
+// POST /course/{course id}/intro
 // Heder: token
 let course_intro = {
-    course_id: number,
     course_intro: Blob
 }
 
 // post course lecure video
-//
+// POST /course/{course id}/lecture/{lecture id}
 // Heder: token
 let lecure_video = {
-    course_id: number,
-    section_id: number,
-    lecture_id: number,
     lecure_video: Blob
 }
 
 // post course lecure file
-//
+// POST /course/{course id}/lecture/{lecture id}/file
 // Heder: token
 let lecure_file = {
-    course_id: number,
-    section_id: number,
-    lecture_id: number,
     lecure_file: Blob
 }
 
 // review endpoint's
 
+// GET /course/{course id}/reviews
+// incase the user need more add a query {from} to the url and give it the last review id
+// header: Token
+let reviewsRes = [{
+    id: Number,
+    profile: URL,
+    full_name: String,
+    rate: Number,
+    feedback: String
+}]
 
+// POST /course/{course id}/review
+// Header: Token
+let reviewsBody = [{
+    rate: Number,
+    feedback: String
+}]
+
+
+// PUT /course/{course id}/review/{review id}
+// Header: Token
+let reviewsBody = [{
+    rate: Number,
+    feedback: String
+}]
+
+
+// DELETE /course/{course id}/review/{review id}
+// Header: Token
 
 // leacture files after send it i need they urls in array if you don't mind 
 // i didn't get this.. Monzer Said
