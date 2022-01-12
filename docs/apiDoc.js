@@ -7,12 +7,12 @@
  * to Hamdi!
  */
 
-import {
-    blob
-} from "stream/consumers"
-import {
-    number
-} from "yup"
+// import {
+//     blob
+// } from "stream/consumers"
+// import {
+//     number
+// } from "yup"
 
 /**
  * first of all
@@ -20,6 +20,7 @@ import {
  * 
  * the data proberty will contain the response that you'll need
  */
+
 let G_res = {
     error: {
         state: Boolean,
@@ -437,6 +438,7 @@ let course_info = {
     catolgy: '',
     sub_catolgy: '',
     course_name: '',
+    description: "",
     student_learn: [],
     requirements: [],
     price: number,
@@ -597,8 +599,6 @@ let lecure_file = {
 // header: Token
 let reviewsRes = [{
     id: Number,
-    profile: URL,
-    full_name: String,
     rate: Number,
     feedback: String
 }]
@@ -609,7 +609,6 @@ let reviewsBody = [{
     rate: Number,
     feedback: String
 }]
-
 
 // PUT /course/{course id}/review/{review id}
 // Header: Token

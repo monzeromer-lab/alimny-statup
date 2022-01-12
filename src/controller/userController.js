@@ -7,7 +7,8 @@ const {
         generateAccessToken
     } = require("../auth/accessToken"),
     crypto = require("crypto"), {
-        verificationEmail
+        verificationEmail,
+        resetMail
     } = require("../service/mailVerification"), {
         getUserEmail,
         saveUserProfile,
@@ -15,7 +16,9 @@ const {
         updateUser,
         activeAccount
     } = require("../service/userService"),
-    hash_password = require("../auth/hashPassword")
+    hash_password = require("../auth/hashPassword"), {
+        storeResetCode
+    } = require("../service/cacheManagment")
 
 module.exports.register = async (req, res, next) => {
     //get the body data
@@ -319,4 +322,44 @@ module.exports.signup_page_info = (req, res, next) => {
             age
         }]
     })
+}
+
+module.exports.reset_code_controller = async (req, res, next) => {
+
+    // get the body
+    let {
+        email
+    } = req.body
+
+    // get the user using his email
+    let user_email = await getUserEmail(email, next)
+
+    // generate reset code
+    let resetCode = crypto.randomBytes(6).toString("hex")
+
+    if (user_email >= 1) {
+        resetMail(email, resetCode).then((success) => {
+            // save the generated code in cache
+            storeResetCode(user_email.id, resetCode)
+            // response with 200 in case successed
+            res.status(200).json({
+                error: {
+                    state: false
+                },
+                message: "check your email we sent you a verification code",
+                data: []
+            })
+        }).catch((error) => {
+            res.status(403).json({
+                error: {
+                    state: true,
+                    errorCode: 403,
+                    errorMessage: error,
+                    errors: []
+                },
+                message: "couldn't send the email to the user",
+                data: []
+            })
+        })
+    }
 }

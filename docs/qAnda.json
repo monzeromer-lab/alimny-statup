@@ -1,0 +1,92 @@
+[
+    {
+        "course_id": 23,
+        "course_name": "deep learning",
+        "que": [
+            {
+                "user_id": 2134,
+                "user_name": "Monzer Omer",
+                "profile": "/public/images/IMG-23953532532.png",
+                "qua_id": 21094,
+                "title": "How To Add text input",
+                "body" : "I'm trying to add text input in my page"
+            },
+            {
+                "user_id": 2134,
+                "user_name": "Monzer Omer",
+                "profile": "/public/images/IMG-23953532532.png",
+                "qua_id": 21094,
+                "title": "How To Add text input",
+                "body" : "I'm trying to add text input in my page"
+            },
+            {
+                "user_id": 2134,
+                "user_name": "Monzer Omer",
+                "profile": "/public/images/IMG-23953532532.png",
+                "qua_id": 21094,
+                "title": "How To Add text input",
+                "body" : "I'm trying to add text input in my page"
+            }
+        ]
+    },
+    {
+        "course_id": 23,
+        "course_name": "deep learning",
+        "que": [
+            {
+                "user_id": 2134,
+                "user_name": "Monzer Omer",
+                "profile": "/public/images/IMG-23953532532.png",
+                "qua_id": 21094,
+                "title": "How To Add text input",
+                "body" : "I'm trying to add text input in my page"
+            },
+            {
+                "user_id": 2134,
+                "user_name": "Monzer Omer",
+                "profile": "/public/images/IMG-23953532532.png",
+                "qua_id": 21094,
+                "title": "How To Add text input",
+                "body" : "I'm trying to add text input in my page"
+            },
+            {
+                "user_id": 2134,
+                "user_name": "Monzer Omer",
+                "profile": "/public/images/IMG-23953532532.png",
+                "qua_id": 21094,
+                "title": "How To Add text input",
+                "body" : "I'm trying to add text input in my page"
+            }
+        ]
+    },
+    {
+        "course_id": 23,
+        "course_name": "deep learning",
+        "que": [
+            {
+                "user_id": 2134,
+                "user_name": "Monzer Omer",
+                "profile": "/public/images/IMG-23953532532.png",
+                "qua_id": 21094,
+                "title": "How To Add text input",
+                "body" : "I'm trying to add text input in my page"
+            },
+            {
+                "user_id": 2134,
+                "user_name": "Monzer Omer",
+                "profile": "/public/images/IMG-23953532532.png",
+                "qua_id": 21094,
+                "title": "How To Add text input",
+                "body" : "I'm trying to add text input in my page"
+            },
+            {
+                "user_id": 2134,
+                "user_name": "Monzer Omer",
+                "profile": "/public/images/IMG-23953532532.png",
+                "qua_id": 21094,
+                "title": "How To Add text input",
+                "body" : "I'm trying to add text input in my page"
+            }
+        ]
+    }
+]

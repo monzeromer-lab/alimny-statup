@@ -2,7 +2,7 @@ const database = require("../database/connection")
 
 module.exports.getUserEmail = async function (email, next) {
     try {
-        let [rows, fields] = await database.query(`SELECT email FROM user WHERE email = "${email}"`)
+        let [rows, fields] = await database.query(`SELECT id, email FROM user WHERE email = "${email}"`)
         return rows
     } catch (error) {
         return next(error)
@@ -20,7 +20,7 @@ module.exports.saveUserProfile = async function (user, verficationCode, next) {
 
 module.exports.getUserByEmail = async function (email, next) {
     try {
-        let [user, errors] = await database.query(`SELECT email, password, first_name, last_name, age  FROM user WHERE email = "${email}"`)
+        let [user, errors] = await database.query(`SELECT id, email, password, first_name, last_name, age  FROM user WHERE email = "${email}"`)
         return user
     } catch (error) {
         return next(error)
@@ -48,6 +48,15 @@ module.exports.getVerificationCode = async function(verificationCode, next) {
 module.exports.activeAccount = async function(id){
     try {
         let [state, errors] = await database.query(`UPDATE user SET verified = 1`)
+        return state
+    } catch (error) {
+        return next(error)
+    }
+}
+
+module.exports.updatePassword = async function(new_password){
+    try {
+        let [state, errors] = await database.query(`UPDATE user SET password = ${new_password}`)
         return state
     } catch (error) {
         return next(error)
