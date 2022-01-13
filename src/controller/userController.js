@@ -16,16 +16,15 @@ const {
         updateUser,
         activeAccount,
         updatePassword
-    } = require("../service/userService.db"),
+    } = require("../service/userServices.db"),
     hash_password = require("../auth/hashPassword"), {
         storeResetCode
-    } = require("../service/cacheManagment")
+    } = require("../helpers/cacheManagment")
 
 module.exports.register = async (req, res, next) => {
     //get the body data
     let {
-        firstName,
-        lastName,
+        name,
         phoneNumber,
         password,
         email,
@@ -78,8 +77,7 @@ module.exports.register = async (req, res, next) => {
 
                 // save the user profile
                 let insert = await saveUserProfile({
-                    firstName,
-                    lastName,
+                    name,
                     phoneNumber,
                     hashedPassword,
                     email,
@@ -89,8 +87,7 @@ module.exports.register = async (req, res, next) => {
 
                 let token = generateAccessToken({
                     email,
-                    firstName,
-                    lastName,
+                    name,
                     age
                 })
                 // send the verification code to the user if there's error response with 403 to change the email later
@@ -167,10 +164,8 @@ module.exports.login = async (req, res, next) => {
 
                 // generate new token
                 let token = generateAccessToken({
-                    email: user[0].email,
-                    first_name: user[0].first_name,
-                    last_name: user[0].last_name,
-                    age: user[0].age
+                    id: user[0].id,
+                    email: user[0].email
                 })
 
                 // response with 200 and the token in header
@@ -225,8 +220,7 @@ module.exports.update = async (req, res, next) => {
         state = undefined,
             age = undefined,
             phoneNumber = undefined,
-            lastName = undefined,
-            firstName = undefined,
+            name = undefined,
             bio = undefined
 
     } = req.body
@@ -241,8 +235,7 @@ module.exports.update = async (req, res, next) => {
         state,
         age,
         phoneNumber,
-        lastName,
-        firstName,
+        name,
         bio
     }, {
         abortEarly: false
@@ -253,8 +246,7 @@ module.exports.update = async (req, res, next) => {
         state,
         age,
         phoneNumber,
-        lastName,
-        firstName,
+        name,
         bio
     }, next, id)
 
@@ -309,8 +301,7 @@ module.exports.signup_page_info = (req, res, next) => {
     let {
         id,
         email,
-        firstName,
-        lastName,
+        name,
         age
     } = req.user
 
@@ -320,7 +311,7 @@ module.exports.signup_page_info = (req, res, next) => {
         },
         message: "successfully registered!",
         data: [{
-            full_name: `${firstName}${lastName}`,
+            name: name,
             email,
             age
         }]
@@ -340,17 +331,18 @@ module.exports.reset_code_controller = async (req, res, next) => {
     // generate reset code
     let resetCode = crypto.randomBytes(6).toString("hex")
 
-    if (user_email >= 1) {
+    if (user_email.length >= 1) {
         resetMail(email, resetCode).then((success) => {
             // save the generated code in cache
-            storeResetCode(user_email.id, resetCode)
+            let store = storeResetCode(user_email.id, email, resetCode)
+            console.log(store);
             // response with 200 in case successed
             res.status(200).json({
                 error: {
                     state: false
                 },
                 message: "check your email we sent you a verification code",
-                data: []
+                data: resetCode
             })
         }).catch((error) => {
             res.status(403).json({
@@ -364,41 +356,49 @@ module.exports.reset_code_controller = async (req, res, next) => {
                 data: []
             })
         })
-    }
-}
-
-module.exports.reset_pass =  async (req, res, next) => {
-        
-    // get the body
-    let {
-        new_pass,
-        confirm_pass
-    } = req.body
-
-    // bcrypt the password and save it
-    hash_password(new_pass).then((password) => {
-      let passwordState = await updatePassword(password, next)
-      console.log(passwordState);
-      if (passwordState >= 1){
+    } else {
         res.status(403).json({
-            error: {
-                state: false
-            },
-            message: "success",
-            data: []
-        })
-      }
-      else{
-        res.status(500).json({
             error: {
                 state: true,
                 errorCode: 403,
-                errorMessage: err
+                errors: []
             },
-            message: "unexpected err happened at save new password process",
+            message: "email isn't avaliable",
             data: []
         })
-      }
+    }
+}
+
+module.exports.reset_pass = async (req, res, next) => {
+
+    // get the body
+    let {
+        new_pass
+    } = req.body
+
+    // bcrypt the password and save it
+    hash_password(new_pass).then( async (password) => {
+        let passwordState = await updatePassword(password, next)
+        console.log(passwordState);
+        if (passwordState >= 1) {
+            res.status(403).json({
+                error: {
+                    state: false
+                },
+                message: "success",
+                data: []
+            })
+        } else {
+            res.status(500).json({
+                error: {
+                    state: true,
+                    errorCode: 403,
+                    errorMessage: err
+                },
+                message: "unexpected err happened at save new password process",
+                data: []
+            })
+        }
     }).catch((err) => {
         res.status(500).json({
             error: {

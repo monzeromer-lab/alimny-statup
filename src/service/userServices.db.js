@@ -11,7 +11,7 @@ module.exports.getUserEmail = async function (email, next) {
 
 module.exports.saveUserProfile = async function (user, verficationCode, next) {
     try {
-        let [insert, issuse] = await database.query(`INSERT INTO user (first_name, last_name, phone_number, password, email, state, age, verification_code) VALUES ("${user.firstName}", "${user.lastName}", "${user.phoneNumber}", "${user.hashedPassword}", "${user.email}", "${user.state}", "${user.age}", "${verficationCode}")`)
+        let [insert, issuse] = await database.query(`INSERT INTO user (name, phone_number, password, email, state, age, verification_code) VALUES ("${user.firstName}", "${user.lastName}", "${user.phoneNumber}", "${user.hashedPassword}", "${user.email}", "${user.state}", "${user.age}", "${verficationCode}")`)
         return insert
     } catch (error) {
         return next(error)
@@ -20,7 +20,7 @@ module.exports.saveUserProfile = async function (user, verficationCode, next) {
 
 module.exports.getUserByEmail = async function (email, next) {
     try {
-        let [user, errors] = await database.query(`SELECT id, email, password, first_name, last_name, age  FROM user WHERE email = "${email}"`)
+        let [user, errors] = await database.query(`SELECT id, email, password, name, age  FROM user WHERE email = "${email}"`)
         return user
     } catch (error) {
         return next(error)
@@ -57,6 +57,24 @@ module.exports.activeAccount = async function(id, next){
 module.exports.updatePassword = async function(new_password, next){
     try {
         let [state, errors] = await database.query(`UPDATE user SET password = ${new_password}`)
+        return state
+    } catch (error) {
+        return next(error)
+    }
+}
+
+module.exports.getUserProfile = async function(userId, email, next){
+    try {
+        let [state, errors] = await database.query(`SELECT profile FROM user WHERE id = ${userId} AND email = ${email}`)
+        return state
+    } catch (error) {
+        return next(error)
+    }
+}
+
+module.exports.updateUserProfile = async function(path, userId, email, next){
+    try {
+        let [state, errors] = await database.query(`UPDATE user SET profile = ${path} WHERE id = ${userId} AND email = ${email}`)
         return state
     } catch (error) {
         return next(error)

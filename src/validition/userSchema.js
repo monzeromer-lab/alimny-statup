@@ -1,11 +1,7 @@
 const Joi = require("joi");
 
 module.exports.registerSchema = Joi.object({
-    firstName: Joi.string()
-        .max(15)
-        .required(),
-
-    lastName: Joi.string()
+    name: Joi.string()
         .max(15)
         .required(),
 
@@ -43,11 +39,7 @@ module.exports.loginSchema = Joi.object({
 })
 
 module.exports.updateSchema = Joi.object({
-    firstName: Joi.string()
-        .max(15)
-        .optional(),
-
-    lastName: Joi.string()
+    name: Joi.string()
         .max(15)
         .optional(),
 

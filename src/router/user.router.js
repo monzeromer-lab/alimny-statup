@@ -17,8 +17,17 @@ const express = require("express"),
     } = require("../middleware/userManamgment.mid"),
     {
         reset_bodyValidition
-    } = require("../validition/userValidetation")
-
+    } = require("../validition/userValidetation"),
+    {
+        getUserProfile,
+        updateUserProfile
+    } = require("../service/userServices.db"),
+    {
+        user_profile
+    } = require("../helpers/fileManagment"),
+    {
+        deleteUserProfile
+    } = require("../service/userServices.fs")
 
 user_router.post("/profile/login", login)
     .post("/profile/register", register)
@@ -27,5 +36,20 @@ user_router.post("/profile/login", login)
     .get("/profile/signup", authenticateToken, signup_page_info)
     .post("/profile/reset", reset_code_controller)
     .post("/profile/reset/:code", check_resetKey, reset_bodyValidition, reset_pass)
+    .put("/profile/image", authenticateToken, user_profile.single("profile"), async (req, res, next) => {
+        // first validate the request
+        // get current user image path
+        let current_profile = await getUserProfile(req.user.id, req.user.email, next)
+        // delete the previous image
+        deleteUserProfile(current_profile[0].profile, next).then( async (success) => {
+            // update the image path in the profile
+            await updateUserProfile(req.file.path, req.user.id, req.user.email, next)
+        }).catch((err) => {
+
+        })
+
+
+        // response with 200
+    })
 
 module.exports = user_router
