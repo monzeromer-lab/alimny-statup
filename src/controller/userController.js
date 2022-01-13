@@ -14,8 +14,9 @@ const {
         saveUserProfile,
         getUserByEmail,
         updateUser,
-        activeAccount
-    } = require("../service/userService"),
+        activeAccount,
+        updatePassword
+    } = require("../service/userService.db"),
     hash_password = require("../auth/hashPassword"), {
         storeResetCode
     } = require("../service/cacheManagment")
@@ -277,7 +278,7 @@ module.exports.active_account = async (req, res, next) => {
     let verificationCode = await getVerificationCode(code, next)
 
     if (verificationCode >= 1) {
-        let active_account = await activeAccount(verificationCode[0].id)
+        let active_account = await activeAccount(verificationCode[0].id, next)
         if (active_account >= 1) {
             res.status(200).json({
                 error: {
@@ -304,7 +305,9 @@ module.exports.active_account = async (req, res, next) => {
 }
 
 module.exports.signup_page_info = (req, res, next) => {
+    // TODO: this endpoint isn't finished yet
     let {
+        id,
         email,
         firstName,
         lastName,
@@ -362,4 +365,50 @@ module.exports.reset_code_controller = async (req, res, next) => {
             })
         })
     }
+}
+
+module.exports.reset_pass =  async (req, res, next) => {
+        
+    // get the body
+    let {
+        new_pass,
+        confirm_pass
+    } = req.body
+
+    // bcrypt the password and save it
+    hash_password(new_pass).then((password) => {
+      let passwordState = await updatePassword(password, next)
+      console.log(passwordState);
+      if (passwordState >= 1){
+        res.status(403).json({
+            error: {
+                state: false
+            },
+            message: "success",
+            data: []
+        })
+      }
+      else{
+        res.status(500).json({
+            error: {
+                state: true,
+                errorCode: 403,
+                errorMessage: err
+            },
+            message: "unexpected err happened at save new password process",
+            data: []
+        })
+      }
+    }).catch((err) => {
+        res.status(500).json({
+            error: {
+                state: true,
+                errorCode: 403,
+                errorMessage: err
+            },
+            message: "unexpected err happened at hashPassword process",
+            data: []
+        })
+    })
+
 }

@@ -37,6 +37,8 @@ module.exports.loginSchema = Joi.object({
 
     password: Joi.string()
         .alphanum()
+        .min(8)
+        .max(15)
         .required()
 })
 
@@ -63,4 +65,15 @@ module.exports.updateSchema = Joi.object({
     bio: Joi.string()
         .max(101)
         .optional()
+})
+
+module.exports.resetSchema = Joi.object({
+    new_pass: Joi.string()
+    .alphanum()
+    .min(8)
+    .max(15)
+    .required(),
+    confirm_pass: Joi.any()
+    .valid(Joi.ref('password'))
+    .required()
 })

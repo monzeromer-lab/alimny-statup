@@ -45,16 +45,16 @@ module.exports.getVerificationCode = async function(verificationCode, next) {
     }
 }
 
-module.exports.activeAccount = async function(id){
+module.exports.activeAccount = async function(id, next){
     try {
-        let [state, errors] = await database.query(`UPDATE user SET verified = 1`)
+        let [state, errors] = await database.query(`UPDATE user SET verified = 1 WHERE id = ${id}`)
         return state
     } catch (error) {
         return next(error)
     }
 }
 
-module.exports.updatePassword = async function(new_password){
+module.exports.updatePassword = async function(new_password, next){
     try {
         let [state, errors] = await database.query(`UPDATE user SET password = ${new_password}`)
         return state
