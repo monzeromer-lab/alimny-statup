@@ -424,35 +424,17 @@ module.exports.reset_pass = async (req, res) => {
         let passwordState = await updatePassword(password).catch((error) => {
             throw new Error(error)
         })
-        if (passwordState) {
-            res.status(403).json({
-                error: {
-                    state: false
-                },
-                message: "success",
-                data: []
-            })
-        } else {
-            res.status(500).json({
-                error: {
-                    state: true,
-                    errorCode: 403,
-                    errorMessage: err
-                },
-                message: "unexpected err happened at save new password process",
-                data: []
-            })
-        }
-    }).catch((err) => {
-        res.status(500).json({
+
+        res.status(403).json({
             error: {
-                state: true,
-                errorCode: 403,
-                errorMessage: err
+                state: false
             },
-            message: "unexpected err happened at hashPassword process",
+            message: "success",
             data: []
         })
+
+    }).catch((error) => {
+        throw new Error(error)
     })
 
 }
@@ -475,6 +457,14 @@ module.exports.updateProfile = async (req, res) => {
                 throw new Error(error)
             })
 
+            res.status(403).json({
+                error: {
+                    state: false
+                },
+                message: "success",
+                data: []
+            })
+
             // if there's one delete the previous one and add the new one
         } else {
             // delete the previous image
@@ -483,6 +473,14 @@ module.exports.updateProfile = async (req, res) => {
                 await updateUserProfile(req.file.path, req.user.id, req.user.email).catch((error) => {
                     throw new Error(error)
                 })
+
+                res.status(403).json({
+                    error: {
+                        state: false
+                    },
+                    message: "success",
+                    data: []
+                })
             }).catch((error) => {
                 throw new Error(error)
             })
@@ -490,7 +488,4 @@ module.exports.updateProfile = async (req, res) => {
 
     })
 
-
-
-    // response with 200
 }
