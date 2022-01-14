@@ -56,7 +56,7 @@ module.exports.activeAccount = async function(id, next){
 
 module.exports.updatePassword = async function(new_password, next){
     try {
-        let [state, errors] = await database.query(`UPDATE user SET password = ${new_password}`)
+        let [state, errors] = await database.query(`UPDATE user SET password = "${new_password}"`)
         return state
     } catch (error) {
         return next(error)
@@ -65,7 +65,7 @@ module.exports.updatePassword = async function(new_password, next){
 
 module.exports.getUserProfile = async function(userId, email, next){
     try {
-        let [state, errors] = await database.query(`SELECT profile FROM user WHERE id = ${userId} AND email = ${email}`)
+        let [state, errors] = await database.query(`SELECT profile FROM user WHERE id = ${userId} AND email = "${email}"`)
         return state
     } catch (error) {
         return next(error)
@@ -74,7 +74,7 @@ module.exports.getUserProfile = async function(userId, email, next){
 
 module.exports.updateUserProfile = async function(path, userId, email, next){
     try {
-        let [state, errors] = await database.query(`UPDATE user SET profile = ${path} WHERE id = ${userId} AND email = ${email}`)
+        let [state, errors] = await database.query(`UPDATE user SET profile = "${path}" WHERE id = ${userId} AND email = "${email}"`)
         return state
     } catch (error) {
         return next(error)

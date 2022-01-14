@@ -334,8 +334,8 @@ module.exports.reset_code_controller = async (req, res, next) => {
     if (user_email.length >= 1) {
         resetMail(email, resetCode).then((success) => {
             // save the generated code in cache
-            let store = storeResetCode(user_email.id, email, resetCode)
-            console.log(store);
+            storeResetCode(user_email.id, email, resetCode)
+            
             // response with 200 in case successed
             res.status(200).json({
                 error: {
@@ -379,8 +379,7 @@ module.exports.reset_pass = async (req, res, next) => {
     // bcrypt the password and save it
     hash_password(new_pass).then( async (password) => {
         let passwordState = await updatePassword(password, next)
-        console.log(passwordState);
-        if (passwordState >= 1) {
+        if (passwordState) {
             res.status(403).json({
                 error: {
                     state: false

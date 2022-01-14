@@ -13,7 +13,6 @@ module.exports.check_resetKey = (req, res, next) => {
 
     // get the reset code from the cache
     stored_code = getResetCode(code)
-    console.log(`on mid of get is: ${stored_code};`);
 
     // if there's no code response with 403
     if (stored_code == undefined) {

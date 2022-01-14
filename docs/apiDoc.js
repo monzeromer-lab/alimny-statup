@@ -348,13 +348,78 @@ let res9 = [{
 // GET /course/q&a/{course id}
 // header: Token
 
-// res is in the file
+let qares = [
+    {
+        "course_id": 23,
+        "course_name": "deep learning",
+        "que": [
+            {
+                "user_id": 2134,
+                "user_name": "Monzer Omer",
+                "profile": "/public/images/IMG-23953532532.png",
+                "qua_id": 21094,
+                "title": "How To Add text input",
+                "body" : "I'm trying to add text input in my page"
+            },
+            {
+                "user_id": 2134,
+                "user_name": "Monzer Omer",
+                "profile": "/public/images/IMG-23953532532.png",
+                "qua_id": 21094,
+                "title": "How To Add text input",
+                "body" : "I'm trying to add text input in my page"
+            },
+            {
+                "user_id": 2134,
+                "user_name": "Monzer Omer",
+                "profile": "/public/images/IMG-23953532532.png",
+                "qua_id": 21094,
+                "title": "How To Add text input",
+                "body" : "I'm trying to add text input in my page"
+            }
+        ]
+    }]
+
+
 
 // quastion is also in a json file 
 // GET /course/q&a/quation/{quation id}
 // header: Token
 
-// res in json file we have
+let qres = [
+    {
+        "cousre_id" : 129,
+        "course_name" : "deep learning",
+        "user_id": 19,
+        "user_name" : "Ali Omer",
+        "title": "issuse in deploy",
+        "media": "/public/images/IMG-3284278352.png",
+        "body": "i get this error when i trid to deploy my application",
+        "aswers": [
+            {
+                "id": 23,
+                "user_id": 12,
+                "user_name": "Mohammed Hamdi",
+                "body": "the error you have is because you didn't specify port number to your application to run in",
+                "media": "/public/images/IMG-2935720983.png"
+            },
+            {
+                "id": 27,
+                "user_id": 119,
+                "user_name": "Mohammed Khalid",
+                "body": "the error you have is because you didn't specify port number to your application to run in",
+                "media": "/public/images/IMG-2935340983.png"
+            },
+            {
+                "id": 2392,
+                "user_id": 125,
+                "user_name": "Mohammed Ali",
+                "body": "the error you have is because you didn't specify port number to your application to run in",
+                "media": "/public/images/IMG-2393720983.png"
+            }
+        ]
+    }
+]
 
 // waiting for your review..
 // and you can add how you will send the data to me and i'll edit it as i think it could be better..

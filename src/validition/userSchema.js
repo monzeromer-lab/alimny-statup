@@ -65,7 +65,8 @@ module.exports.resetSchema = Joi.object({
     .min(8)
     .max(15)
     .required(),
-    confirm_pass: Joi.any()
-    .valid(Joi.ref('password'))
+
+    confirm_pass: Joi.string()
+    .valid(Joi.ref("new_pass"))
     .required()
 })
