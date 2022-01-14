@@ -458,8 +458,7 @@ let user = {
 // GET || PUT /profile/settings
 // Header: token
 let settings = {
-    first_name: "",
-    last_name: "",
+    name: "",
     bio: "",
     links: {
         facebook: '',

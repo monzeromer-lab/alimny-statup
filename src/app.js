@@ -14,17 +14,15 @@ app.use("/", require("./router/user.router"))
 
 //error handeler
 app.use((err, req, res, next) => {
-    if (err) {
         res.status(500).json({
             error: {
                 state: true,
                 errorCode: 500,
-                message: err
+                message: err.message
             },
             message: "server error",
             data: []
         })
-    }
 })
 
 module.exports = app

@@ -2,11 +2,11 @@ const {
     deleteFile
 } = require("../helpers/fileManagment")
 
-module.exports.deleteUserProfile = async function (path, next) {
+module.exports.deleteUserProfile = async function (path) {
     try {
-        deleteFile(path)
+        await deleteFile(path)
     } catch (error) {
-        return next(err)
+        throw new Error(error)
     }
 
 }

@@ -15,19 +15,10 @@ module.exports.reset_bodyValidition = (req, res, next) => {
         confirm_pass
     }, {
         abortEarly: false
-    }).error
+    })
 
-    if (validationTest) {
-        res.status(403).json({
-            error: {
-                state: true,
-                errorCode: 403,
-                errorMessage: "body errors",
-                errors: validationTest
-            },
-            message: "try again, request body isn't valid",
-            data: []
-        })
+    if (validationTest.error) {
+        throw new Error(validationTest.error)
     } else {
         next()
     }

@@ -28,10 +28,9 @@ module.exports.verificationEmail = function (to, verficationCode) {
     return new Promise((resolve, reject) => {
         smtpTransport.sendMail(mailOptions, function (error, info) {
             if (error) {
-                console.log(error);
-                reject(error)
+                throw new Error(error)
             } else {
-                console.log(info);
+                
                 resolve(info)
             }
         })
@@ -55,10 +54,9 @@ module.exports.resetMail = function(to, code){
     return new Promise((resolve, reject) => {
         smtpTransport.sendMail(mailOptions, function (error, info) {
             if (error) {
-                console.log(error);
-                reject(error)
+                throw new Error(error)
             } else {
-                console.log(info);
+                
                 resolve(info)
             }
         })

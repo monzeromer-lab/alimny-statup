@@ -22,7 +22,7 @@ module.exports.authenticateToken = (req, res, next) => {
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
     console.log(err)
 
-    if (err) next(err)
+    if (err) throw new Error(error)
 
     req.user = user
 

@@ -15,13 +15,23 @@ const {
         getUserByEmail,
         updateUser,
         activeAccount,
-        updatePassword
+        updatePassword,
+        getUserProfile,
+        updateUserProfile,
+        getVerificationCode
     } = require("../service/userServices.db"),
     hash_password = require("../auth/hashPassword"), {
         storeResetCode
-    } = require("../helpers/cacheManagment")
+    } = require("../helpers/cacheManagment"), {
+        deleteUserProfile
+    } = require("../service/userServices.fs")
 
-module.exports.register = async (req, res, next) => {
+
+// ===========================================================
+//              register new user
+// ===========================================================
+
+module.exports.register = async (req, res) => {
     //get the body data
     let {
         name,
@@ -37,10 +47,10 @@ module.exports.register = async (req, res, next) => {
     //validate the body
     let validationTest = registerSchema.validate(req.body, {
         abortEarly: false
-    }).error
+    })
 
     // if there's issuse with the body response with 403
-    if (validationTest) {
+    if (validationTest.error) {
         res.status(403).json({
             error: {
                 state: true,
@@ -54,7 +64,9 @@ module.exports.register = async (req, res, next) => {
     } else {
 
         // check if the email is already used
-        let rows = await getUserEmail(email, next)
+        let rows = await getUserEmail(email).catch((error) => {
+            throw new Error(error)
+        })
 
         // if the email is used response with 403
         if (rows.length >= 1) {
@@ -75,50 +87,43 @@ module.exports.register = async (req, res, next) => {
             // hash the password
             hash_password(password).then(async (hashedPassword) => {
 
-                // save the user profile
-                let insert = await saveUserProfile({
-                    name,
-                    phoneNumber,
-                    hashedPassword,
-                    email,
-                    state,
-                    age
-                }, verficationCode, next)
-
-                let token = generateAccessToken({
-                    email,
-                    name,
-                    age
-                })
                 // send the verification code to the user if there's error response with 403 to change the email later
-                verificationEmail(email, verficationCode).then((success) => {
-                    res.status(403).header("Authorization", `Bearer ${token}`).json({
+                verificationEmail(email, verficationCode).then(async (success) => {
+                    // save the user profile
+                    await saveUserProfile({
+                        name,
+                        phoneNumber,
+                        hashedPassword,
+                        email,
+                        state,
+                        age
+                    }, verficationCode).catch((error) => {
+                        throw new Error(error)
+                    })
+                    res.status(403).json({
                         error: {
                             state: false
                         },
                         message: "successfully registered!",
-                        data: [insert]
+                        data: []
                     })
                 }).catch((error) => {
-                    res.status(403).header("Authorization", `Bearer ${token}`).json({
-                        error: {
-                            state: true,
-                            errorCode: 403,
-                            errorMessage: "email verification code did't sent",
-                            errors: [error]
-                        },
-                        message: "successfully registered but please check your email",
-                        data: [insert]
-                    })
+                    throw new Error(error)
                 })
-            }).catch((err) => {
-                next(err)
+            }).catch((error) => {
+                throw new Error(error)
             })
         }
+
     }
 }
 
-module.exports.login = async (req, res, next) => {
+
+// ===========================================================
+//              login user
+// ===========================================================
+
+module.exports.login = async (req, res) => {
     //get the body data
     let {
         email,
@@ -148,16 +153,22 @@ module.exports.login = async (req, res, next) => {
     } else {
 
         //if valid check if the email is available
-        let user_email = await getUserEmail(email, next)
-        console.log(user_email);
+        let user_email = await getUserEmail(email).catch((error) => {
+            throw new Error(error)
+        })
+
         // if the email is correct
         if (user_email.length >= 1) {
 
             // if valid get the user data and compare the stored password with the entered one
-            let user = await getUserByEmail(email, next)
+            let user = await getUserByEmail(email).catch((error) => {
+                throw new Error(error)
+            })
 
             // compare the password with the stored one
-            let compareResult = await bcrypt.compare(password, user[0].password)
+            let compareResult = await bcrypt.compare(password, user[0].password).catch((error) => {
+                throw new Error(error)
+            })
 
             // if correct then login the user
             if (compareResult) {
@@ -214,7 +225,12 @@ module.exports.login = async (req, res, next) => {
 
 }
 
-module.exports.update = async (req, res, next) => {
+
+// ===========================================================
+//              update basic info in account
+// ===========================================================
+
+module.exports.update = async (req, res) => {
     // get the body values
     let {
         state = undefined,
@@ -248,7 +264,9 @@ module.exports.update = async (req, res, next) => {
         phoneNumber,
         name,
         bio
-    }, next, id)
+    }, id).catch((error) => {
+        throw new Error(error)
+    })
 
     res.status(201).json({
         error: {
@@ -260,17 +278,26 @@ module.exports.update = async (req, res, next) => {
 
 }
 
-module.exports.active_account = async (req, res, next) => {
+// ===========================================================
+//              active account
+// ===========================================================
+
+module.exports.active_account = async (req, res) => {
     // get verification code
     let {
         code
     } = req.params
 
     // get the code from the database
-    let verificationCode = await getVerificationCode(code, next)
+    let verificationCode = await getVerificationCode(code).catch((error) => {
+        throw new Error(error)
+    })
 
     if (verificationCode >= 1) {
-        let active_account = await activeAccount(verificationCode[0].id, next)
+        let active_account = await activeAccount(verificationCode[0].id).catch((error) => {
+            throw new Error(error)
+        })
+
         if (active_account >= 1) {
             res.status(200).json({
                 error: {
@@ -296,7 +323,11 @@ module.exports.active_account = async (req, res, next) => {
     }
 }
 
-module.exports.signup_page_info = (req, res, next) => {
+// ===========================================================
+//              get user profile
+// ===========================================================
+
+module.exports.signup_page_info = (req, res) => {
     // TODO: this endpoint isn't finished yet
     let {
         id,
@@ -318,7 +349,13 @@ module.exports.signup_page_info = (req, res, next) => {
     })
 }
 
-module.exports.reset_code_controller = async (req, res, next) => {
+
+// ===========================================================
+//              reset password request
+// ===========================================================
+
+
+module.exports.reset_code_controller = async (req, res) => {
 
     // get the body
     let {
@@ -326,7 +363,9 @@ module.exports.reset_code_controller = async (req, res, next) => {
     } = req.body
 
     // get the user using his email
-    let user_email = await getUserEmail(email, next)
+    let user_email = await getUserEmail(email).catch((error) => {
+        throw new Error(error)
+    })
 
     // generate reset code
     let resetCode = crypto.randomBytes(6).toString("hex")
@@ -335,7 +374,7 @@ module.exports.reset_code_controller = async (req, res, next) => {
         resetMail(email, resetCode).then((success) => {
             // save the generated code in cache
             storeResetCode(user_email.id, email, resetCode)
-            
+
             // response with 200 in case successed
             res.status(200).json({
                 error: {
@@ -369,7 +408,11 @@ module.exports.reset_code_controller = async (req, res, next) => {
     }
 }
 
-module.exports.reset_pass = async (req, res, next) => {
+// ===========================================================
+//              reset password
+// ===========================================================
+
+module.exports.reset_pass = async (req, res) => {
 
     // get the body
     let {
@@ -377,8 +420,10 @@ module.exports.reset_pass = async (req, res, next) => {
     } = req.body
 
     // bcrypt the password and save it
-    hash_password(new_pass).then( async (password) => {
-        let passwordState = await updatePassword(password, next)
+    hash_password(new_pass).then(async (password) => {
+        let passwordState = await updatePassword(password).catch((error) => {
+            throw new Error(error)
+        })
         if (passwordState) {
             res.status(403).json({
                 error: {
@@ -410,4 +455,42 @@ module.exports.reset_pass = async (req, res, next) => {
         })
     })
 
+}
+
+// ===========================================================
+//              update profile picture
+// ===========================================================
+
+module.exports.updateProfile = async (req, res) => {
+
+    // get current user image path
+    await getUserProfile(req.user.id, req.user.email).catch((err) => {
+        throw new Error(err)
+    }).then(async (data) => {
+
+        // if there's no image add the new one
+        if (data.length < 1) {
+            // update the image path in the profile
+            await updateUserProfile(req.file.path, req.user.id, req.user.email).catch((error) => {
+                throw new Error(error)
+            })
+
+            // if there's one delete the previous one and add the new one
+        } else {
+            // delete the previous image
+            deleteUserProfile(data[0].profile).then(async (success) => {
+                // update the image path in the profile
+                await updateUserProfile(req.file.path, req.user.id, req.user.email).catch((error) => {
+                    throw new Error(error)
+                })
+            }).catch((error) => {
+                throw new Error(error)
+            })
+        }
+
+    })
+
+
+
+    // response with 200
 }
