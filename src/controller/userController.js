@@ -64,9 +64,7 @@ module.exports.register = async (req, res) => {
     } else {
 
         // check if the email is already used
-        let rows = await getUserEmail(email).catch((error) => {
-            throw new Error(error)
-        })
+        let rows = await getUserEmail(email)
 
         // if the email is used response with 403
         if (rows.length >= 1) {
@@ -97,9 +95,8 @@ module.exports.register = async (req, res) => {
                         email,
                         state,
                         age
-                    }, verficationCode).catch((error) => {
-                        throw new Error(error)
-                    })
+                    }, verficationCode)
+
                     res.status(403).json({
                         error: {
                             state: false
@@ -153,17 +150,13 @@ module.exports.login = async (req, res) => {
     } else {
 
         //if valid check if the email is available
-        let user_email = await getUserEmail(email).catch((error) => {
-            throw new Error(error)
-        })
+        let user_email = await getUserEmail(email)
 
         // if the email is correct
         if (user_email.length >= 1) {
 
             // if valid get the user data and compare the stored password with the entered one
-            let user = await getUserByEmail(email).catch((error) => {
-                throw new Error(error)
-            })
+            let user = await getUserByEmail(email)
 
             // compare the password with the stored one
             let compareResult = await bcrypt.compare(password, user[0].password).catch((error) => {
@@ -264,9 +257,7 @@ module.exports.update = async (req, res) => {
         phoneNumber,
         name,
         bio
-    }, id).catch((error) => {
-        throw new Error(error)
-    })
+    }, id)
 
     res.status(201).json({
         error: {
@@ -289,14 +280,11 @@ module.exports.active_account = async (req, res) => {
     } = req.params
 
     // get the code from the database
-    let verificationCode = await getVerificationCode(code).catch((error) => {
-        throw new Error(error)
-    })
+    let verificationCode = await getVerificationCode(code)
 
     if (verificationCode >= 1) {
-        let active_account = await activeAccount(verificationCode[0].id).catch((error) => {
-            throw new Error(error)
-        })
+        
+        let active_account = await activeAccount(verificationCode[0].id)
 
         if (active_account >= 1) {
             res.status(200).json({
@@ -363,9 +351,7 @@ module.exports.reset_code_controller = async (req, res) => {
     } = req.body
 
     // get the user using his email
-    let user_email = await getUserEmail(email).catch((error) => {
-        throw new Error(error)
-    })
+    let user_email = await getUserEmail(email)
 
     // generate reset code
     let resetCode = crypto.randomBytes(6).toString("hex")
@@ -421,9 +407,7 @@ module.exports.reset_pass = async (req, res) => {
 
     // bcrypt the password and save it
     hash_password(new_pass).then(async (password) => {
-        let passwordState = await updatePassword(password).catch((error) => {
-            throw new Error(error)
-        })
+        let passwordState = await updatePassword(password)
 
         res.status(403).json({
             error: {
@@ -446,16 +430,12 @@ module.exports.reset_pass = async (req, res) => {
 module.exports.updateProfile = async (req, res) => {
 
     // get current user image path
-    await getUserProfile(req.user.id, req.user.email).catch((err) => {
-        throw new Error(err)
-    }).then(async (data) => {
+    await getUserProfile(req.user.id, req.user.email).then(async (data) => {
 
         // if there's no image add the new one
         if (data.length < 1) {
             // update the image path in the profile
-            await updateUserProfile(req.file.path, req.user.id, req.user.email).catch((error) => {
-                throw new Error(error)
-            })
+            await updateUserProfile(req.file.path, req.user.id, req.user.email)
 
             res.status(403).json({
                 error: {
@@ -470,9 +450,7 @@ module.exports.updateProfile = async (req, res) => {
             // delete the previous image
             deleteUserProfile(data[0].profile).then(async (success) => {
                 // update the image path in the profile
-                await updateUserProfile(req.file.path, req.user.id, req.user.email).catch((error) => {
-                    throw new Error(error)
-                })
+                await updateUserProfile(req.file.path, req.user.id, req.user.email)
 
                 res.status(403).json({
                     error: {

@@ -7,7 +7,8 @@ const express = require("express"),
         active_account,
         signup_page_info,
         reset_code_controller,
-        reset_pass
+        reset_pass,
+        updateProfile
     } = require("../controller/userController"),
     {
         authenticateToken
@@ -29,6 +30,6 @@ user_router.post("/profile/login", login)
     .get("/profile/:id", authenticateToken, signup_page_info)
     .post("/profile/reset", reset_code_controller)
     .post("/profile/reset/:code", check_resetKey, reset_bodyValidition, reset_pass)
-    .put("/profile/image", authenticateToken, user_profile.single("profile"), )
+    .put("/profile/image", authenticateToken, user_profile.single("profile"), updateProfile)
 
 module.exports = user_router
