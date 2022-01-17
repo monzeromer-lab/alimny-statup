@@ -1,5 +1,6 @@
 const express = require('express')
-const app = express()
+const app = express(),
+compression = require('compression')
 
 // handle json body
 // encode url
@@ -7,6 +8,8 @@ app.use(express.json())
     .use(express.urlencoded({
         extended: false
     }))
+    .use(compression())
+    .use("/", express.static(__dirname + "/public/"))
 
 // setup the routers
 // user routers

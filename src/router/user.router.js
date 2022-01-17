@@ -31,5 +31,9 @@ user_router.post("/profile/login", login)
     .post("/profile/reset", reset_code_controller)
     .post("/profile/reset/:code", check_resetKey, reset_bodyValidition, reset_pass)
     .put("/profile/image", authenticateToken, user_profile.single("profile"), updateProfile)
+    .put("/profile/social", (req, res, next) => {
+        // TODO: update social links endpoint
+        
+    })
 
 module.exports = user_router
