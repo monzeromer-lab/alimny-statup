@@ -1,5 +1,16 @@
 const database = require("../database/connection")
 
+function linksCompiner(links) {
+    let temp = ""
+    for (let index = 0; index < links.length; index++) {
+        if (index < links.length - 1)
+            temp += `("${links[index].platform}", "${links[index].link}"), `
+        else
+            temp += `("${links[index].platform}", "${links[index].link}")`
+    }
+    return temp
+}
+
 module.exports.getUserEmail = async function (email) {
     try {
         let [rows, fields] = await database.query(`SELECT id, email FROM user WHERE email = "${email}"`)
@@ -36,7 +47,7 @@ module.exports.updateUser = async function (data, id) {
     }
 }
 
-module.exports.getVerificationCode = async function(verificationCode) {
+module.exports.getVerificationCode = async function (verificationCode) {
     try {
         let [code, errors] = await database.query(`SELECT verification_code, id FROM user WHERE verification_code = ${verificationCode}`)
         return code
@@ -45,7 +56,7 @@ module.exports.getVerificationCode = async function(verificationCode) {
     }
 }
 
-module.exports.activeAccount = async function(id){
+module.exports.activeAccount = async function (id) {
     try {
         let [state, errors] = await database.query(`UPDATE user SET verified = 1 WHERE id = ${id}`)
         return state
@@ -54,7 +65,7 @@ module.exports.activeAccount = async function(id){
     }
 }
 
-module.exports.updatePassword = async function(new_password){
+module.exports.updatePassword = async function (new_password) {
     try {
         let [state, errors] = await database.query(`UPDATE user SET password = "${new_password}"`)
         return state
@@ -63,7 +74,7 @@ module.exports.updatePassword = async function(new_password){
     }
 }
 
-module.exports.getUserProfile = async function(userId, email){
+module.exports.getUserProfile = async function (userId, email) {
     try {
         let [state, errors] = await database.query(`SELECT profile FROM user WHERE id = ${userId} AND email = "${email}"`)
         return state
@@ -72,9 +83,19 @@ module.exports.getUserProfile = async function(userId, email){
     }
 }
 
-module.exports.updateUserProfile = async function(path, userId, email){
+module.exports.updateUserProfile = async function (path, userId, email) {
     try {
         let [state, errors] = await database.query(`UPDATE user SET profile = "${path}" WHERE id = ${userId} AND email = "${email}"`)
+        return state
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+module.exports.insertSocialLinks = async function (links, userId, userEmail) {
+    let sql = `INSERT INTO social_links (platform, link) VALUES ${linksCompiner(links)} WHERE id = ${userId} AND email = ${userEmail}`
+    try {
+        let [state, errors] = await database.query(sql)
         return state
     } catch (error) {
         throw new Error(error)
