@@ -8,7 +8,8 @@ const express = require("express"),
         signup_page_info,
         reset_code_controller,
         reset_pass,
-        updateProfile
+        updateProfile,
+        social_controller
     } = require("../controller/userController"),
     {
         authenticateToken
@@ -21,10 +22,10 @@ const express = require("express"),
         social_validitaion
     } = require("../validition/userValidetation"),
     {
-        user_profile
+        upload_image
     } = require("../helpers/fileManagment"),
     {
-        insertSocialLinks
+
     } = require("../service/userServices.db")
 
 user_router.post("/profile/login", login)
@@ -34,27 +35,7 @@ user_router.post("/profile/login", login)
     .get("/profile/:id", authenticateToken, signup_page_info)
     .post("/profile/reset", reset_code_controller)
     .post("/profile/reset/:code", check_resetKey, reset_bodyValidition, reset_pass)
-    .put("/profile/image", authenticateToken, user_profile.single("profile"), updateProfile)
-    .put("/profile/socials",authenticateToken, social_validitaion, async (req, res, next) => {
-        // TODO: update social links endpoint
-        // get the body data
-        let {
-            links
-        } = req.body
-        // get user data from  token
-        let {
-            id,
-            email
-        } = req.user
-
-        await insertSocialLinks(links, id, email)
-        
-        res.status(200).json({
-            error: false,
-            message: "success",
-            data: []
-        })
-        
-    })
+    .put("/profile/image", authenticateToken, upload_image.single("profile"), updateProfile)
+    .put("/profile/socials", authenticateToken, social_validitaion, social_controller)
 
 module.exports = user_router

@@ -29,23 +29,6 @@ const video_storage = multer.diskStorage({
     }
 })
 
-module.exports.user_profile = multer({
-    storage: image_storage,
-    fileFilter: (req, file, callback) => {
-        let ext
-        ext = path.extname(file.originalname);
-        if (ext === '.png' || ext === '.jpg' || ext === '.jpeg' && file.fieldname === "profile") {
-           callback(null, true) 
-        } else {
-            return callback(new Error('only images are allowed png or jpg or jpeg '))
-        }
-        
-    },
-    limits: {
-        fileSize: 1000000 // 1mb
-    }
-})
-
 module.exports.deleteFile = function (dir) {
     return new Promise((resolve, reject) => {
         fileSystem.unlink(dir, (err) => {
@@ -57,3 +40,31 @@ module.exports.deleteFile = function (dir) {
     });
 
 }
+
+module.exports.upload_video = multer({
+    storage: video_storage
+})
+
+module.exports.upload_file = multer({
+    storage: file_storage,
+    limits: {
+        fileSize: 10000000 // 10mb
+    }
+})
+
+module.exports.upload_image = multer({
+    storage: image_storage,
+    fileFilter: (req, file, callback) => {
+        let ext
+        ext = path.extname(file.originalname);
+        if (ext === '.png' || ext === '.jpg' || ext === '.jpeg' && file.fieldname === "profile") {
+            callback(null, true)
+        } else {
+            return callback(new Error('only images are allowed png or jpg or jpeg '))
+        }
+
+    },
+    limits: {
+        fileSize: 2000000 // 2mb
+    }
+})

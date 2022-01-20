@@ -18,7 +18,8 @@ const {
         updatePassword,
         getUserProfile,
         updateUserProfile,
-        getVerificationCode
+        getVerificationCode,
+        insertSocialLinks
     } = require("../service/userServices.db"),
     hash_password = require("../auth/hashPassword"), {
         storeResetCode
@@ -283,7 +284,7 @@ module.exports.active_account = async (req, res) => {
     let verificationCode = await getVerificationCode(code)
 
     if (verificationCode >= 1) {
-        
+
         let active_account = await activeAccount(verificationCode[0].id)
 
         if (active_account >= 1) {
@@ -464,6 +465,32 @@ module.exports.updateProfile = async (req, res) => {
             })
         }
 
+    })
+
+}
+
+// ===========================================================
+//              update social media accounts
+// ===========================================================
+
+module.exports.social_controller = async (req, res, next) => {
+    
+    // get the body data
+    let {
+        links
+    } = req.body
+    // get user data from  token
+    let {
+        id,
+        email
+    } = req.user
+
+    await insertSocialLinks(links, id, email)
+
+    res.status(200).json({
+        error: false,
+        message: "success",
+        data: []
     })
 
 }
