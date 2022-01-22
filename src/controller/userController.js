@@ -453,7 +453,7 @@ module.exports.updateProfile = async (req, res) => {
                 // update the image path in the profile
                 await updateUserProfile(req.file.path, req.user.id, req.user.email)
 
-                res.status(403).json({
+                res.status(200).json({
                     error: {
                         state: false
                     },
