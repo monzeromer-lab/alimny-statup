@@ -1,7 +1,11 @@
 const express = require('express')
 const app = express(),
     compression = require('compression'),
-    helmet = require("helmet");
+    helmet = require("helmet"),
+    cors = require('cors')
+    
+// cors     
+app.use(cors())
 
 // active helmet header attacks security package
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
