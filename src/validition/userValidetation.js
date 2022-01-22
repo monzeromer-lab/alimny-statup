@@ -33,7 +33,8 @@ module.exports.social_validitaion = (req, res, next) => {
     } = req.body
     //validate the body
     let validationTest = social_links.validate(links, {
-        abortEarly: false
+        abortEarly: false,
+        stripUnknown: { objects: true }
     })
     console.log(validationTest);
 
