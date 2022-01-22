@@ -31,12 +31,15 @@ const video_storage = multer.diskStorage({
 
 module.exports.deleteFile = function (dir) {
     return new Promise((resolve, reject) => {
-        fileSystem.unlink(dir, (err) => {
-            if (err) {
-                throw new Error(err)
+        fileSystem.unlink(dir, function(err) {
+            if(err && err.code == 'ENOENT') {
+                resolve("unavailable")
+            } else if (err) {
+                throw new Error("Error occurred while trying to remove file")
+            } else {
+                resolve("removed")
             }
-            resolve("done")
-        })
+        });
     });
 
 }

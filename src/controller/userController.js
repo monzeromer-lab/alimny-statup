@@ -434,7 +434,7 @@ module.exports.updateProfile = async (req, res) => {
     await getUserProfile(req.user.id, req.user.email).then(async (data) => {
 
         // if there's no image add the new one
-        if (data.length < 1) {
+        if (data[0].length < 1) {
             // update the image path in the profile
             await updateUserProfile(req.file.path, req.user.id, req.user.email)
 
