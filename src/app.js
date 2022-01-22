@@ -4,7 +4,7 @@ const app = express(),
     helmet = require("helmet");
 
 // active helmet header attacks security package
-app.use(helmet({ crossOriginResourcePolicy: true }));
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 // compress public data
 app.use(compression())
