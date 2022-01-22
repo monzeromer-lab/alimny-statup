@@ -35,7 +35,7 @@ module.exports.social_validitaion = (req, res, next) => {
     let validationTest = social_links.validate(links, {
         abortEarly: false
     })
-    console.log(validationTest.error);
+    console.log(validationTest);
 
     if (validationTest.error) {
         throw new Error(validationTest)
