@@ -27,6 +27,7 @@ module.exports.authenticateToken = (req, res, next) => {
     next()
 
   } catch (error) {
+    debugger;
     throw new Error(error)
   }
   
