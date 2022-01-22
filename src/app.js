@@ -1,6 +1,10 @@
 const express = require('express')
 const app = express(),
-compression = require('compression')
+    compression = require('compression'),
+    helmet = require("helmet");
+
+// active helmet header attacks security package
+app.use(helmet({ crossOriginResourcePolicy: true }));
 
 // compress public data
 app.use(compression())
@@ -19,15 +23,15 @@ app.use("/", require("./router/user.router"))
 
 //error handeler
 app.use((err, req, res, next) => {
-        res.status(500).json({
-            error: {
-                state: true,
-                errorCode: 500,
-                message: err.message
-            },
-            message: "server error",
-            data: []
-        })
+    res.status(500).json({
+        error: {
+            state: true,
+            errorCode: 500,
+            message: err.message
+        },
+        message: "server error",
+        data: []
+    })
 })
 
 module.exports = app
