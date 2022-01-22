@@ -19,15 +19,16 @@ module.exports.authenticateToken = (req, res, next) => {
     data: []
   })
 
-  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    console.log(token, user)
-
-    if (err) throw new Error(error)
+  try {
+    let user = jwt.verify(token, process.env.TOKEN_SECRET)
 
     req.user = user
-
     next()
-  })
+
+  } catch (error) {
+    throw new Error(error)
+  }
+  
 }
 
 module.exports.generateAccessToken = (data) => {
