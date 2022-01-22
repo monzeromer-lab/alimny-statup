@@ -1,6 +1,6 @@
 const {
     resetSchema,
-    social_links
+    social_linksSchema
 } = require("../validition/userSchema")
 
 module.exports.reset_bodyValidition = (req, res, next) => {
@@ -32,7 +32,7 @@ module.exports.social_validitaion = (req, res, next) => {
         links
     } = req.body
     //validate the body
-    let validationTest = social_links.validate(links, {
+    let validationTest = social_linksSchema.validate(links, {
         abortEarly: false,
         stripUnknown: { objects: true }
     })
