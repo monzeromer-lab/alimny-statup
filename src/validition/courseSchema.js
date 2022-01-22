@@ -22,6 +22,7 @@ module.exports.courseInfo_Schema = Joi.object({
     price: Joi.number().positive().required(),
     level: Joi.string().valid("bigenner", "master", "interminate").required(),
     salutatory_msg: Joi.string().max(270).required(),
-    congratulate_msg: Joi.string().max(270).required(),
-    cupon: Joi.valid(cupon_valid)
+    congratulate_msg: Joi.string().max(270).required()
+    // ,
+    // cupon: Joi.valid(cupon_valid)
 })
