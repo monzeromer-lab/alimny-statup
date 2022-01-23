@@ -1,14 +1,16 @@
 const database = require("../database/connection")
 
-function linksCompiner(links) {
+function linksCompiner(links, user_id) {
     let temp = ""
     for (let index = 0; index < links.length; index++) {
-        if (index < links.length - 1)
-            temp += `("${links[index].platform}", "${links[index].link}"), `
+        if (index < links.length-1)
+            temp += `(${user_id}, "${links[index].platform}", "${links[index].link}"), `
         else
-            temp += `("${links[index].platform}", "${links[index].link}")`
+            temp += `(${user_id}, "${links[index].platform}", "${links[index].link}")`
     }
+    console.log(temp);
     return temp
+    
 }
 
 module.exports.getUserEmail = async function (email) {
@@ -92,8 +94,8 @@ module.exports.updateUserProfile = async function (path, userId, email) {
     }
 }
 
-module.exports.insertSocialLinks = async function (links, userId, userEmail) {
-    let sql = `INSERT INTO social_links (platform, link) VALUES ${linksCompiner(links)} WHERE id = ${userId} AND email = ${userEmail}`
+module.exports.insertSocialLinks = async function (links, userId) {
+    let sql = `INSERT INTO sociallink (user_id, platform, link) VALUES ${linksCompiner(links, userId)}`
     try {
         let [state, errors] = await database.execute(sql)
         return state

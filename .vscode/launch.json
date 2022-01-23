@@ -7,7 +7,7 @@
         
         {
             "command": "npm run debug",
-            "name": "Run npm start",
+            "name": "debug",
             "request": "launch",
             "type": "node-terminal"
         },

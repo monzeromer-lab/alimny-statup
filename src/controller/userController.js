@@ -470,22 +470,20 @@ module.exports.updateProfile = async (req, res) => {
 }
 
 // ===========================================================
-//              update social media accounts
+//              post social media accounts
 // ===========================================================
 
 module.exports.social_controller = async (req, res, next) => {
     
     // get the body data
-    let {
-        links
-    } = req.body
+    let links = req.body
     // get user data from  token
     let {
         id,
         email
     } = req.user
 
-    await insertSocialLinks(links, id, email)
+    await insertSocialLinks(links, id)
 
     res.status(200).json({
         error: false,

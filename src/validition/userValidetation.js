@@ -36,7 +36,7 @@ module.exports.social_validitaion = (req, res, next) => {
         abortEarly: false,
         stripUnknown: { objects: true }
     })
-    console.log(validationTest);
+    
 
     if (validationTest.error) {
         throw new Error(validationTest)

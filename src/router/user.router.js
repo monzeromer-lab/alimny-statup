@@ -36,6 +36,6 @@ user_router.post("/profile/login", login)
     .post("/profile/reset", reset_code_controller)
     .post("/profile/reset/:code", check_resetKey, reset_bodyValidition, reset_pass)
     .put("/profile/image", authenticateToken, upload_image.single("profile"), updateProfile)
-    .put("/profile/socials", authenticateToken, social_validitaion, social_controller)
+    .post("/profile/socials", authenticateToken, social_validitaion, social_controller)
 
 module.exports = user_router
