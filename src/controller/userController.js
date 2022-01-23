@@ -283,19 +283,19 @@ module.exports.active_account = async (req, res) => {
     // get the code from the database
     let verificationCode = await getVerificationCode(code)
 
-    if (verificationCode >= 1) {
+    if (verificationCode.length >= 1) {
 
         let active_account = await activeAccount(verificationCode[0].id)
+        console.log(activeAccount);
 
-        if (active_account >= 1) {
-            res.status(200).json({
-                error: {
-                    state: false
-                },
-                message: "account activated successfully",
-                data: active_account
-            })
-        }
+        res.status(200).json({
+            error: {
+                state: false
+            },
+            message: "account activated successfully",
+            data: active_account
+        })
+        
     } else {
         res.status(403).json({
             error: {
@@ -474,7 +474,7 @@ module.exports.updateProfile = async (req, res) => {
 // ===========================================================
 
 module.exports.social_controller = async (req, res, next) => {
-    
+
     // get the body data
     let links = req.body
     // get user data from  token

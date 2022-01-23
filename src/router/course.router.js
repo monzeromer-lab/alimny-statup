@@ -7,20 +7,8 @@ const express = require("express"),
         create_bodyValidition
     } = require('../validition/courseValiditaion'),
     {
-        createCourse
-    } = require("../service/courseService.db")
+        newCourse_controller
+    } = require("../controller/courseController")
 
-course_router.post("/course/new", authenticateToken, create_bodyValidition, async (req, res, next) => {
 
-    // TODO: save to the database
-    await createCourse(req.body).then((success) => {
-        res.status(200).json({
-            error: {
-                state: false
-            },
-            message: "success",
-            data: []
-        })
-    })
-
-})
+course_router.post("/course/new", authenticateToken, create_bodyValidition, newCourse_controller)

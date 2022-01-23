@@ -24,7 +24,7 @@ module.exports.getUserEmail = async function (email) {
 
 module.exports.saveUserProfile = async function (user, verficationCode) {
     try {
-        let [insert, issuse] = await database.execute(`INSERT INTO user (name, phone_number, password, email, state, age, verification_code) VALUES ("${user.firstName}", "${user.lastName}", "${user.phoneNumber}", "${user.hashedPassword}", "${user.email}", "${user.state}", "${user.age}", "${verficationCode}")`)
+        let [insert, issuse] = await database.execute(`INSERT INTO user (name, phone, password, email, state, age, verification_code) VALUES ("${user.name}", "${user.phoneNumber}", "${user.hashedPassword}", "${user.email}", "${user.state}", "${user.age}", "${verficationCode}")`)
         return insert
     } catch (error) {
         throw new Error(error)
@@ -51,7 +51,7 @@ module.exports.updateUser = async function (data, id) {
 
 module.exports.getVerificationCode = async function (verificationCode) {
     try {
-        let [code, errors] = await database.execute(`SELECT verification_code, id FROM user WHERE verification_code = ${verificationCode}`)
+        let [code, errors] = await database.execute(`SELECT verification_code, id FROM user WHERE verification_code = "${verificationCode}"`)
         return code
     } catch (error) {
         throw new Error(error)
