@@ -8,9 +8,10 @@ const app = express(),
 app.use(cors())
 
 // active helmet header attacks security package
-app.use(helmet.crossOriginResourcePolicy({
-    policy: "cross-origin"
-}));
+app.use(helmet());
+
+// static files
+app.use("/public", express.static("./public"))
 
 // compress public data
 app.use(compression())
@@ -21,7 +22,6 @@ app.use(express.json())
     .use(express.urlencoded({
         extended: false
     }))
-    .use("/", express.static(__dirname + "/public/"))
 
 // setup the routers
 // user routers

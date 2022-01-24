@@ -91,3 +91,33 @@ module.exports.course_req = async function (stuff, courseId) {
         throw new Error(error)
     }
 }
+
+module.exports.postIntro = async function(intro_path, course_id){
+    try {
+        let [state, fields] = await database.execute(`UPDATE course SET intro = "${intro_path}" WHERE id = ${course_id}`)
+        return state
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+module.exports.getCourseOwner = async function(course_id){
+    try {
+        let [state, fields] = await database.execute(`SELECT user_id FROM course WHERE id = ${course_id}`)
+        return state
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+module.exports.getCourseIntro = async function(course_id){
+    try {
+        let [state, fields] = await database.execute(`SELECT intro FROM course WHERE id = ${course_id}`)
+        return state
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
