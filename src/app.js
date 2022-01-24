@@ -3,12 +3,14 @@ const app = express(),
     compression = require('compression'),
     helmet = require("helmet"),
     cors = require('cors')
-    
+
 // cors     
 app.use(cors())
 
 // active helmet header attacks security package
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+app.use(helmet.crossOriginResourcePolicy({
+    policy: "cross-origin"
+}));
 
 // compress public data
 app.use(compression())
@@ -24,6 +26,7 @@ app.use(express.json())
 // setup the routers
 // user routers
 app.use("/", require("./router/user.router"))
+    .use("/", require("./router/course.router"))
 
 //error handeler
 app.use((err, req, res, next) => {

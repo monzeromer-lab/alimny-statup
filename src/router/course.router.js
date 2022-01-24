@@ -12,3 +12,5 @@ const express = require("express"),
 
 
 course_router.post("/course/new", authenticateToken, create_bodyValidition, newCourse_controller)
+
+module.exports = course_router

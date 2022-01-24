@@ -9,13 +9,15 @@ module.exports.create_bodyValidition = (req, res, next) => {
         category,
         sub_category,
         course_name,
+        description,
         student_learn,
         requirements,
         price,
         level,
         salutatory_msg,
         congratulate_msg,
-        cupon
+        coupon,
+        badge
     } = req.body
 
     //validate the body
@@ -23,13 +25,15 @@ module.exports.create_bodyValidition = (req, res, next) => {
         category,
         sub_category,
         course_name,
+        description,
         student_learn,
         requirements,
         price,
         level,
         salutatory_msg,
         congratulate_msg,
-        cupon
+        coupon,
+        badge
     }, {
         abortEarly: false
     })

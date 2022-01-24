@@ -10,15 +10,84 @@ const database = require("../database/connection")
 //     'salute_msg'
 //   ]
 
-module.exports.createCourse = async function({category_id, subcategory, name, level, description, status, price, badge, congratulate_msg, salute_msg}, user_id){
- let sql = ` INSERT INTO course (user_id, category_id, subcategory, name, level, description, status, price, badge, congratulate_msg, salute_msg) values
-  (${user_id}, ${category_id}, ${subcategory}, "${name}", "${level}", "${description}", ${status}, ${price}, "${badge}", "${congratulate_msg}", "${salute_msg}")`
- 
+function student_learnQuery(list, course_id) {
+    let temp = ""
+    for (let index = 0; index < list.length; index++) {
+        if (index < list.length - 1)
+            temp += `("${list[index].body}", ${course_id}), `
+        else
+            temp += `("${list[index].body}", ${course_id})`
+    }
+    return temp
+}
+
+function course_requiermentsQuery(list, course_id) {
+    let temp = ""
+    for (let index = 0; index < list.length; index++) {
+        if (index < list.length - 1)
+            temp += `("${list[index].body}", ${course_id}), `
+        else
+            temp += `("${list[index].body}", ${course_id})`
+    }
+    return temp
+}
+
+module.exports.createCourse = async function (body, user_id) {
+    let {
+        category,
+        sub_category,
+        course_name,
+        price,
+        level,
+        salutatory_msg,
+        congratulate_msg,
+        badge,
+        description
+    } = body
+
+    let sql = ` INSERT INTO course (user_id, category_id, subcategory, name, level, description, status, price, badge, congratulate_msg, salute_msg) values
+  (${user_id}, ${category}, ${sub_category}, "${course_name}", "${level}", "${description}", 0, ${price}, "${badge}", "${congratulate_msg}", "${salutatory_msg}")`
+
     try {
-       let [state, fields] = await database.execute(sql)
-       return state
+        let [state, fields] = await database.execute(sql)
+        return state
     } catch (error) {
         throw new Error(error)
     }
-    
+
+}
+
+module.exports.createCoupon = async function ({
+    course_id,
+    code,
+    discount_per,
+    exp
+}) {
+    try {
+        let [state, fields] = await database.execute(`INSERT INTO coupon (course_id, code, discount_per, exp) VALUES (${course_id}, "${code}", ${discount_per}, "${exp}")`)
+        return state
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+module.exports.studentWill_learn = async function (stuff, courseId) {
+    try {
+        let [state, fields] = await database.execute(`INSERT INTO studentwilllearn (body, course_id) VALUES ${student_learnQuery(stuff, courseId)}`)
+        return state
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+module.exports.course_req = async function (stuff, courseId) {
+    try {
+        let [state, fields] = await database.execute(`INSERT INTO courserequirements (body, course_id) VALUES ${course_requiermentsQuery(stuff, courseId)}`)
+        return state
+
+    } catch (error) {
+        throw new Error(error)
+    }
 }
