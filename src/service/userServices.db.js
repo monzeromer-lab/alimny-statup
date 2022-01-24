@@ -86,8 +86,9 @@ module.exports.getUserProfile = async function (userId, email) {
 }
 
 module.exports.updateUserProfile = async function (path, userId, email) {
+    
     try {
-        let [state, errors] = await database.execute(`UPDATE user SET profile = "${path}" WHERE id = ${userId} AND email = "${email}"`)
+        let [state, errors] = await database.execute(`UPDATE user SET profile = "${path.replace(/\\/g, "\\\\")}" WHERE id = ${userId} AND email = "${email}"`)
         return state
     } catch (error) {
         throw new Error(error)

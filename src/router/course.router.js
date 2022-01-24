@@ -12,7 +12,10 @@ const express = require("express"),
     } = require("../controller/courseController"),
     path = require("path"),
     tmpPath = path.join("./public/videos/tmp"),
-    fileUpload = require("express-fileupload")
+    fileUpload = require("express-fileupload"),
+    {
+        courseOwner_auth
+    } = require("../auth/courseOwner.auth")
 
 course_router.use(fileUpload({
     limits: {
@@ -24,6 +27,6 @@ course_router.use(fileUpload({
 }))
 
 course_router.post("/course/new", authenticateToken, create_bodyValidition, newCourse_controller)
-    .post("/course/:courseId/intro", authenticateToken, courseIntro_controller)
+    .post("/course/:courseId/intro", authenticateToken, courseOwner_auth, courseIntro_controller)
 
 module.exports = course_router

@@ -14,7 +14,7 @@ function renameFile(rename) {
 }
 
 function getFilePath(file) {
-    return `/public/videos/${renameFile(file)}`
+    return `/public/videos/${file}`
 }
 
 function fileExtname(file) {
@@ -67,7 +67,8 @@ module.exports.courseIntro_controller = async (req, res, next) => {
     let {
         course_intro
     } = req.files,
-        filePath = uploadPath + `/${renameFile(course_intro.name)}`,
+    newFilename = renameFile(course_intro.name)
+        filePath = uploadPath + `/${newFilename}`,
         exts = [".mp4", ".mov", ".mkv", ".avi"]
 
 
@@ -108,17 +109,11 @@ module.exports.courseIntro_controller = async (req, res, next) => {
             } else {
                 course_intro.mv(filePath, async (err) => {
                     if (err) throw new Error("err")
-                    await postIntro(getFilePath(course_intro.name), req.params.courseId).then((success) => {
+                    await postIntro(getFilePath(newFilename), req.params.courseId).then((success) => {
                         res.status(200).json({
                             error: false,
                             message: "success",
-                            data: {
-                                fileName: renameFile(course_intro.name),
-                                fileMimeType: course_intro.mimetype,
-                                fileSize: course_intro.size,
-                                isOverSize: course_intro.truncated,
-                                filePublicUrl: getFilePath(course_intro.name)
-                            }
+                            data: []
                         })
                     })
 
