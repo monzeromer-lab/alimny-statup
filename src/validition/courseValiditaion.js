@@ -1,5 +1,6 @@
 const {
-    courseInfo_Schema
+    courseInfo_Schema,
+    courseReview
 } = require("./courseSchema")
 
 module.exports.create_bodyValidition = (req, res, next) => {
@@ -34,6 +35,27 @@ module.exports.create_bodyValidition = (req, res, next) => {
         congratulate_msg,
         coupon,
         badge
+    }, {
+        abortEarly: false
+    })
+
+    if (validationTest.error) {
+        throw new Error(validationTest.error)
+    } else {
+        next()
+    }
+}
+
+module.exports.courseReview_bodyValidition = (req, res, next) => {
+    // get the body
+    let {
+        rate,
+        feedback
+    } = req.body
+
+    let validationTest = courseReview.validate({
+        rate,
+        feedback
     }, {
         abortEarly: false
     })

@@ -4,7 +4,7 @@ let student_learn_valid = Joi.object().keys({
     body: Joi.string().max(101).required()
 })
 let requirements_valid = Joi.object().keys({
-body: Joi.string().max(101).required()
+    body: Joi.string().max(101).required()
 })
 
 // TODO: "ValidationError: \"badge\" is required. \"coupon\" must be [[object Object]]"
@@ -25,4 +25,15 @@ module.exports.courseInfo_Schema = Joi.object({
         discount_per: Joi.number().max(3).optional(),
         exp: Joi.number().max(3).optional()
     })
+})
+
+module.exports.courseReview = Joi.object({
+    rate: Joi.number()
+        .min(1)
+        .max(5)
+        .required(),
+    feedback: Joi.string()
+        .min(1)
+        .max(101)
+        .required()
 })

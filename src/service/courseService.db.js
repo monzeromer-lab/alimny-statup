@@ -141,3 +141,13 @@ module.exports.updateCourseCover = async function(intro_path, course_id){
         throw new Error(error)
     }
 }
+
+module.exports.saveReview = async function(rating, body, course, user){
+    try {
+        let [state, fields] = await database.execute(`INSERT INTO review (rating, feedback, user_id, course_id) VALUES (${rating}, "${body}", ${user}, ${course})`)
+        return state
+        
+    } catch (error) {
+        throw new Error(error)
+    }
+}
