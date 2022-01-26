@@ -85,6 +85,24 @@ module.exports.getUserProfile = async function (userId, email) {
     }
 }
 
+module.exports.getUser = async function (userId) {
+    try {
+        let [state, errors] = await database.execute(`SELECT id, name, age, phone, email, profile, state, bio FROM user WHERE id = ${userId}`)
+        return state
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+module.exports.getSociallinks = async function (userId) {
+    try {
+        let [state, errors] = await database.execute(`SELECT platform, link FROM sociallink WHERE user_id = ${userId}`)
+        return state
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 module.exports.updateUserProfile = async function (path, userId, email) {
     
     try {

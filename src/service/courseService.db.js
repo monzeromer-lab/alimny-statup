@@ -121,3 +121,23 @@ module.exports.getCourseIntro = async function(course_id){
         throw new Error(error)
     }
 }
+
+module.exports.getCourseCover = async function(course_id){
+    try {
+        let [state, fields] = await database.execute(`SELECT cover FROM course WHERE id = ${course_id}`)
+        return state
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+module.exports.updateCourseCover = async function(intro_path, course_id){
+    try {
+        let [state, fields] = await database.execute(`UPDATE course SET cover = "${intro_path}" WHERE id = ${course_id}`)
+        return state
+
+    } catch (error) {
+        throw new Error(error)
+    }
+}

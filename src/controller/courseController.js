@@ -4,8 +4,13 @@ const {
     studentWill_learn,
     course_req,
     postIntro,
-    getCourseIntro
+    getCourseIntro,
+    getCourseCover,
+    updateCourseCover
 } = require("../service/courseService.db"),
+{
+    deleteCourseCover
+} = require("../service/courseServices.fs"),
     path = require("path"),
     uploadPath = path.join("./public/videos")
 
@@ -123,4 +128,46 @@ module.exports.courseIntro_controller = async (req, res, next) => {
         })
 
     }
+}
+
+
+module.exports.courseCover_controller = async (req, res) => {
+
+    // get current user image path
+    await getCourseCover(req.user.id).then(async (data) => {
+
+        // if there's no image add the new one
+        if (data.length < 1) {
+            // update the image path in the profile
+            await updateCourseCover(req.file.path, req.params.courseId)
+
+            res.status(403).json({
+                error: {
+                    state: false
+                },
+                message: "success",
+                data: []
+            })
+
+            // if there's one delete the previous one and add the new one
+        } else {
+            // delete the previous image
+            deleteCourseCover(data[0].profile).then(async (success) => {
+                // update the image path in the profile
+                await updateCourseCover(req.file.path, req.params.courseId)
+
+                res.status(200).json({
+                    error: {
+                        state: false
+                    },
+                    message: "success",
+                    data: []
+                })
+            }).catch((error) => {
+                throw new Error(error)
+            })
+        }
+
+    })
+
 }

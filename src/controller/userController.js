@@ -19,7 +19,9 @@ const {
         getUserProfile,
         updateUserProfile,
         getVerificationCode,
-        insertSocialLinks
+        insertSocialLinks,
+        getUser,
+        getSociallinks
     } = require("../service/userServices.db"),
     hash_password = require("../auth/hashPassword"), {
         storeResetCode
@@ -316,26 +318,21 @@ module.exports.active_account = async (req, res) => {
 //              get user profile
 // ===========================================================
 
-module.exports.signup_page_info = (req, res) => {
+module.exports.signup_page_info = async (req, res) => {
     // TODO: this endpoint isn't finished yet
-    let {
-        id,
-        email,
-        name,
-        age
-    } = req.user
-
-    res.status(200).json({
-        error: {
-            state: false
-        },
-        message: "successfully registered!",
-        data: [{
-            name: name,
-            email,
-            age
-        }]
+    
+    await getUser(req.params.id).then( async (success) => {
+        success[0].links = await getSociallinks(req.params.id)
+        success[0].profile = `https://www.Alimny.com/${success[0].profile}`.replace("\\\\", "/")
+        res.status(200).json({
+            error: {
+                state: false
+            },
+            message: "success",
+            data: success
+        })
     })
+    
 }
 
 
@@ -434,7 +431,7 @@ module.exports.updateProfile = async (req, res) => {
     await getUserProfile(req.user.id, req.user.email).then(async (data) => {
 
         // if there's no image add the new one
-        if (data[0].length < 1) {
+        if (data.length < 1) {
             // update the image path in the profile
             await updateUserProfile(req.file.path, req.user.id, req.user.email)
 
