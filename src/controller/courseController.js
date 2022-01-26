@@ -7,7 +7,8 @@ const {
     getCourseIntro,
     getCourseCover,
     updateCourseCover,
-    saveReview
+    saveReview,
+    updateReview
 } = require("../service/courseService.db"),
 {
     deleteCourseCover
@@ -186,6 +187,29 @@ module.exports.postReview = async (req, res) => {
     } = req.user
 
         await saveReview(rate, feedback, req.params.courseId, id).then((success) => {
+            res.status(200).json({
+                error: {
+                    state: false
+                },
+                message: "success",
+                data: []
+            })
+        })
+}
+
+module.exports.updateReview = async (req, res) => {
+    // get the body date
+    let {
+        rate,
+        feedback
+    } = req.body
+
+    // get the user id
+    let {
+        id
+    } = req.user
+
+        await updateReview(req.params.reviewId, rate, feedback).then((success) => {
             res.status(200).json({
                 error: {
                     state: false

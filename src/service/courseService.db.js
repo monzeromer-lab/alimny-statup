@@ -151,3 +151,23 @@ module.exports.saveReview = async function(rating, body, course, user){
         throw new Error(error)
     }
 }
+
+module.exports.getReviewId = async function(review, course){
+    try {
+        let [state, fields] = await database.execute(`SELECT id FROM review WHERE id = ${review} AND course_id = ${course}`)
+        return state
+        
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+module.exports.updateReview = async function(review, rate, body){
+    try {
+        let [state, fields] = await database.execute(`UPDATE review SET rating = ${rate} , feedback = "${body}" id = ${review}`)
+        return state
+        
+    } catch (error) {
+        throw new Error(error)
+    }
+}

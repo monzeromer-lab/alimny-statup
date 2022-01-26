@@ -11,7 +11,8 @@ const express = require("express"),
         newCourse_controller,
         courseIntro_controller,
         courseCover_controller,
-        postReview
+        postReview,
+        updateReview
     } = require("../controller/courseController"),
     path = require("path"),
     tmpPath = path.join("./public/videos/tmp"),
@@ -23,10 +24,9 @@ const express = require("express"),
         upload_image
     } = require("../helpers/fileManagment"),
     {
-        isValidCourse
-    } = require("../middleware/course_valid.mid")
-
-// course_router.use()
+        isValidCourse,
+        isValidReview
+    } = require("../middleware/course_managment.mid")
 
 course_router.post("/course/new", authenticateToken, create_bodyValidition, newCourse_controller)
     .post("/course/:courseId/intro", authenticateToken, isValidCourse, fileUpload({
@@ -64,6 +64,7 @@ course_router.post("/course/new", authenticateToken, create_bodyValidition, newC
     // }]
 
     .post("/course/:courseId/review", authenticateToken, isValidCourse, courseReview_bodyValidition, postReview)
+    .put("/course/:courseId/review/:reviewId", authenticateToken, isValidCourse, isValidReview, courseReview_bodyValidition, updateReview)
 
 
 // DELETE /course/{course id}/review/{review id}
