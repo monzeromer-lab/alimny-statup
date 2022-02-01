@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt"),
+const bcrypt = require("bcryptjs"),
     salt_rounds = 10
 
 module.exports = async (password) => {

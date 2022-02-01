@@ -3,7 +3,7 @@ const {
     loginSchema,
     updateSchema
 } = require("../validition/userSchema"),
-    bcrypt = require("bcrypt"), {
+    bcrypt = require("bcryptjs"), {
         generateAccessToken
     } = require("../auth/accessToken"),
     crypto = require("crypto"), {
