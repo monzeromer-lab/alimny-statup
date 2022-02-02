@@ -19,7 +19,8 @@ const db = mysql.createPool({
 })
 
 db.getConnection().then((success) => {
-    console.log(success.threadId);
+   //  console.log(success.threadId);
+   return;
 }).catch((error) => {
     throw new Error(error)
 })
