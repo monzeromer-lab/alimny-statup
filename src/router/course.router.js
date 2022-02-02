@@ -69,4 +69,6 @@ course_router.post("/course/new", authenticateToken, create_bodyValidition, newC
 
 // DELETE /course/{course id}/review/{review id}
 // Header: Token
+
+.delete("/course/:courseId/review/:reviewId", authenticateToken, isValidCourse)
 module.exports = course_router
