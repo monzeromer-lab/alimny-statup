@@ -1,4 +1,4 @@
-# alimny-statup
+# alimny-startup
 
 ## API
 
