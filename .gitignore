@@ -110,3 +110,5 @@ dist
 
 # cpuprofile files
 .cpuprofile
+
+package-lock.json
