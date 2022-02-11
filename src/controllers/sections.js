@@ -1,49 +1,31 @@
 const sectionServices = require('../services/Section.services');
+const asyncHandler = require('../middleware/async')
 
 
-exports.getSections = async (req,res,next) => {
-	try {
-		const sections = await sectionServices.getSections(req.params.courseId);
-		res.status(200).json({ success:true, data: sections })
-	}catch(error) {
-		console.log(error)
-	}
-}
+exports.getSections = asyncHandler(async (req,res,next) => {
+	const sections = await sectionServices.getSections(req.params.courseId);
+	res.status(200).json({ success:true, data: sections })
+});
 
-exports.getSection = async (req,res,next) => {
-	try {
-		const section = await sectionServices.getSection(req.params.id);
-		res.status(200).json({ success:true, data: section })
-	}catch(error) {
-		console.log(error)
-	}
-}
+exports.getSection = asyncHandler(async (req,res,next) => {
+	const section = await sectionServices.getSection(req.params.id);
+	res.status(200).json({ success:true, data: section })
+});
 
-exports.createSection = async (req,res,next) => {
-	try {
-		req.body.courseId = req.params.courseId;
-		const section = await sectionServices.store(req.body);
-		res.status(200).json({ success:true, data: section })
-	}catch(error) {
-		console.log(error)
-	}
-}
+exports.createSection = asyncHandler(async (req,res,next) => {
+	req.body.courseId = req.params.courseId;
+	const section = await sectionServices.store(req.body);
+	res.status(200).json({ success:true, data: section })
+});
 
 
-exports.updateSection = async (req,res,next) => {
-	try {
-		const section = await sectionServices.update(req.params.id,req.body);
-		res.status(200).json({ success:true, data: section })
-	}catch(error) {
-		console.log(error)
-	}
-}
+exports.updateSection = asyncHandler(async (req,res,next) => {
+	const section = await sectionServices.update(req.params.id,req.body);
+	res.status(200).json({ success:true, data: section })
+});
 
-exports.deleteSection = async (req,res,next) => {
-	try {
-		await sectionServices.delete(req.params.id);
-		res.status(200).json({ success:true })
-	}catch(error) {
-		console.log(error)
-	}
-}
+
+exports.deleteSection = asyncHandler(async (req,res,next) => {
+	await sectionServices.delete(req.params.id);
+	res.status(200).json({ success:true })
+});

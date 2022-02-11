@@ -5,39 +5,37 @@ const User = require('../models/1-user')
 const userServices = require('../services/user.services');
 const sendEmail = require('../helpers/sendEmail');
 const bcrypt = require('bcryptjs')
+const asyncHandler = require('../middleware/async')
 
-exports.register = async (req,res,next) => {
-	try {
-		const token = jwt.sign({email:req.body.email},'cnonocnocno')
-		req.body.confirmationCode = token;
-		const salt = await bcrypt.genSalt(10)
-		req.body.password = await bcrypt.hash(req.body.password,salt)
-		const user = await userServices.store(req.body)
 
-		 // Create reset url
-		  const confirmUrl = `${req.protocol}://${req.get(
-		    'host'
-		  )}/api/v1/auth/confirm/${token}`;
+exports.register = asyncHandler(async (req,res,next) => {
 
-		  const message = `Thanks for signing up Please confirm your email by clicking 
+	const token = jwt.sign({email:req.body.email},'cnonocnocno')
+	req.body.confirmationCode = token;
+	const salt = await bcrypt.genSalt(10)
+	req.body.password = await bcrypt.hash(req.body.password,salt)
+	const user = await userServices.store(req.body)
+
+	// Create reset url
+	const confirmUrl = `${req.protocol}://${req.get(
+		'host'
+	)}/api/v1/auth/confirm/${token}`;
+
+	const message = `Thanks for signing up Please confirm your email by clicking 
 		  					<a href ='${confirmUrl}'>here</a>`
-		 try {
-			await sendEmail({
-				email:user.email,
-				subject: "Email confirmation",
-				message
-			})		 	
-		 }catch(error) {
-		 	console.log(error)
-		 }
-		sendTokenResponse(user,200,res)
-	}catch(error) {
-		console.log(error)
-	}
-}
 
-exports.login = async (req,res,next) => {
-	try {
+	// Send an email
+	await sendEmail({
+		email:user.email,
+		subject: "Email confirmation",
+		message
+	});
+
+	sendTokenResponse(user,200,res)
+});
+
+exports.login = asyncHandler(async (req,res,next) => {
+
 		const { email ,password } = req.body
 
 		// Validate email & password
@@ -69,14 +67,10 @@ exports.login = async (req,res,next) => {
 		}
 
 		sendTokenResponse(user,200,res)
-
-	}catch(error) {
-		console.log(error)
-	}
-}
+});
 
 
-exports.logout = async (req, res, next) => {
+exports.logout = asyncHandler(async (req, res, next) => {
   res.cookie('token', 'none', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true
@@ -86,9 +80,9 @@ exports.logout = async (req, res, next) => {
     success: true,
     data: {}
   });
-};
+});
 
-exports.forgotPassword = async(req,res,next) => {
+exports.forgotPassword = asyncHandler(async(req,res,next) => {
 	const user = await User.findOne({where:{email:req.body.email}});
 
 	if(!user) {
@@ -136,10 +130,9 @@ exports.forgotPassword = async(req,res,next) => {
   }
 
 	res.status(200).json({success:true,data:user});
-};
+});
 
-exports.resetPassword = async (req,res,next) => {
-	try {
+exports.resetPassword = asyncHandler(async (req,res,next) => {
 		 // Get hashed token
 		const resetPasswordToken = crypto
 		    .createHash('sha256')
@@ -172,13 +165,11 @@ exports.resetPassword = async (req,res,next) => {
 		  await user.save();
 
 		  sendTokenResponse(user, 200, res);
-	}catch(error) {
-		console.log(error)
-	}
-}
+	
+})
 
-exports.verfiyEmail = async (req,res,next) => {
-	try {
+exports.verfiyEmail = asyncHandler(async (req,res,next) => {
+
 		const user = await User.findOne({where:{confirmationCode:req.params.confirmationCode}})
 		if(!user) {
 			return res.status(404).json({
@@ -191,10 +182,8 @@ exports.verfiyEmail = async (req,res,next) => {
 
 		res.status(200).json({success:true,msg: "Your account is active now"})
 
-	}catch(error) {
-		console.log(error)
-	}
-}
+	
+});
 
 // Get token from model,create cookie and send ErrorResponse
 const sendTokenResponse = (user,statusCode,res) => {

@@ -1,48 +1,31 @@
 const categoryServices = require('../services/category.services');
+const asyncHandler = require('../middleware/async')
 
 
-exports.getCategories = async (req,res,next) => {
-	try {
-		const categories = await categoryServices.getCategories();
-		res.status(200).json({ success:true, data: categories })
-	}catch(error) {
-		console.log(error)
-	}
-}
+exports.getCategories = asyncHandler(async (req,res,next) => {
 
-exports.getCategory = async (req,res,next) => {
-	try {
-		const category = await categoryServices.getCategory(req.params.id);
-		res.status(200).json({ success:true, data: category })
-	}catch(error) {
-		console.log(error)
-	}
-}
+	const categories = await categoryServices.getCategories();
+	res.status(200).json({ success:true, data: categories })
+	
+});
 
-exports.createCategory = async (req,res,next) => {
-	try {
-		const category = await categoryServices.store(req.body);
-		res.status(200).json({ success:true, data: category })
-	}catch(error) {
-		console.log(error)
-	}
-}
+exports.getCategory = asyncHandler(async (req,res,next) => {
+	const category = await categoryServices.getCategory(req.params.id);
+	res.status(200).json({ success:true, data: category })
+});
+
+exports.createCategory = asyncHandler(async (req,res,next) => {
+	const category = await categoryServices.store(req.body);
+	res.status(200).json({ success:true, data: category })
+});
 
 
-exports.updateCategory = async (req,res,next) => {
-	try {
-		const category = await categoryServices.update(req.params.id,req.body);
-		res.status(200).json({ success:true, data: category })
-	}catch(error) {
-		console.log(error)
-	}
-}
+exports.updateCategory = asyncHandler(async (req,res,next) => {
+	const category = await categoryServices.update(req.params.id,req.body);
+	res.status(200).json({ success:true, data: category })
+});
 
-exports.deleteCategory = async (req,res,next) => {
-	try {
-		await categoryServices.delete(req.params.id);
-		res.status(200).json({ success:true })
-	}catch(error) {
-		console.log(error)
-	}
-}
+exports.deleteCategory = asyncHandler(async (req,res,next) => {
+	await categoryServices.delete(req.params.id);
+	res.status(200).json({ success:true })
+});
