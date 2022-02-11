@@ -21,7 +21,8 @@ exports.getCourse = async (req,res,next) => {
 
 exports.createCourse = async (req,res,next) => {
 	try {
-		const course = await courseServices.store(req.body);
+		req.body.courseId = req.params.courseId
+		const course = await req.user.createCourse(req.body);
 		res.status(200).json({success:true,data:course})
 
 	}catch(error) {

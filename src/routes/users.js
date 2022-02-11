@@ -7,17 +7,25 @@ const {
 	deleteUser,
 } = require('../controllers/users');
 
+// Middlewares
+const {protect , authorize} = require('../middleware/auth');
+
+// Validation
+const {registerValidationRules,registerValidate} = require('../validation/auth');
+
 const router = express.Router();
 
-router.get('/',getUsers)
+router.use(protect)
 
-router.get('/:id',getUser)
+router.get('/',authorize('user','admin'),getUsers)
 
-router.post('/create',createUser)
+router.get('/:id',authorize('admin'),getUser)
 
-router.put('/update/:id',updateUser)
+router.post('/create',authorize('admin'),registerValidationRules(),registerValidate,createUser)
 
-router.delete('/delete/:id',deleteUser)
+router.put('/update/:id',authorize('user','admin'),updateUser)
+
+router.delete('/delete/:id',authorize('admin'),deleteUser)
 
 
 module.exports = router;

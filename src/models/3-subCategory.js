@@ -17,6 +17,10 @@ const SubCategory = database.define('subCategories', {
 });
 
 Category.hasMany(SubCategory);
-SubCategory.belongsTo(Category);
+SubCategory.belongsTo(Category,{
+	foreignKey: {
+		allowNull:false
+	}
+});
 
 module.exports = SubCategory;

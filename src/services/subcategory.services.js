@@ -1,5 +1,5 @@
 const SubCategory = require('../models/3-subCategory');
-const Category = require('../models/2-Category')
+const Category = require('../models/2-category')
 
 module.exports = class subCategoryServices {
 	// get all subCategorys

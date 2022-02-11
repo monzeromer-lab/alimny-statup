@@ -1,9 +1,9 @@
-const SectionServices = require('../services/Section.services');
+const sectionServices = require('../services/Section.services');
 
 
 exports.getSections = async (req,res,next) => {
 	try {
-		const sections = await SectionServices.getSections(req.params.courseId);
+		const sections = await sectionServices.getSections(req.params.courseId);
 		res.status(200).json({ success:true, data: sections })
 	}catch(error) {
 		console.log(error)
@@ -32,7 +32,7 @@ exports.createSection = async (req,res,next) => {
 
 exports.updateSection = async (req,res,next) => {
 	try {
-		const section = await SectionServices.update(req.params.id,req.body);
+		const section = await sectionServices.update(req.params.id,req.body);
 		res.status(200).json({ success:true, data: section })
 	}catch(error) {
 		console.log(error)
@@ -41,7 +41,7 @@ exports.updateSection = async (req,res,next) => {
 
 exports.deleteSection = async (req,res,next) => {
 	try {
-		await SectionServices.delete(req.params.id);
+		await sectionServices.delete(req.params.id);
 		res.status(200).json({ success:true })
 	}catch(error) {
 		console.log(error)

@@ -41,7 +41,7 @@ module.exports = class SectionServices {
 	// update a Section
 	static async update(sectionId,data) {
 		try{
-			const oldSection = await Section.findByPk(SectionId)
+			const oldSection = await Section.findByPk(sectionId)
 			if(!oldSection) {
 				return  false;
 			}

@@ -10,17 +10,20 @@ const {
 // middlewares
 const { protect, authorize } = require('../middleware/auth')
 
+// Validation
+const {sectionValidationRules,sectionValidate} = require('../validation/section');
+
 const router = express.Router();
 
 router.use(protect)
 
 router.get('/:courseId',authorize('user','admin'),getSections);
 
-router.get('/:id',authorize('user','admin'),getSection);
+router.get('/single/:id',authorize('user','admin'),getSection);
 
-router.post('/create/:courseId',authorize('user','admin'),createSection);
+router.post('/create/:courseId',authorize('user','admin'),sectionValidationRules(),sectionValidate,createSection);
 
-router.put('/update/:id',authorize('user','admin'),updateSection);
+router.put('/update/:id',authorize('user','admin'),sectionValidationRules(),sectionValidate,updateSection);
 
 router.delete('/delete/:id',authorize('user','admin'),deleteSection);
 

@@ -36,6 +36,11 @@ const Course = database.define('courses', {
 		allowNull:false,
 		defaultValue:'not published'
 	},
+	type: {
+		type: Sequelize.ENUM('free','paid'),
+		allowNull:false,
+		defaultValue:'paid'
+	},
 	price: {
 		type: Sequelize.FLOAT,
 		allowNull:false
@@ -53,8 +58,20 @@ const Course = database.define('courses', {
 
 
 User.hasMany(Course);
-Course.belongsTo(User);
-Course.belongsTo(Category);
-Course.belongsTo(SubCategory);
+Course.belongsTo(User,{
+	foreignKey: {
+		allowNull:false
+	}
+});
+Course.belongsTo(Category,{
+	foreignKey: {
+		allowNull:false
+	}
+});
+Course.belongsTo(SubCategory,{
+	foreignKey: {
+		allowNull:false
+	}
+});
 
 module.exports = Course;

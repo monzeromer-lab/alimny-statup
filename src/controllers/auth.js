@@ -21,12 +21,15 @@ exports.register = async (req,res,next) => {
 
 		  const message = `Thanks for signing up Please confirm your email by clicking 
 		  					<a href ='${confirmUrl}'>here</a>`
-
-		await sendEmail({
-			email:user.email,
-			subject: "Email confirmation",
-			message
-		})
+		 try {
+			await sendEmail({
+				email:user.email,
+				subject: "Email confirmation",
+				message
+			})		 	
+		 }catch(error) {
+		 	console.log(error)
+		 }
 		sendTokenResponse(user,200,res)
 	}catch(error) {
 		console.log(error)

@@ -21,6 +21,10 @@ const Section = database.define('sections', {
 });
 
 Course.hasMany(Section);
-Section.belongsTo(Course)
+Section.belongsTo(Course,{
+	foreignKey: {
+		allowNull:false
+	}
+})
 
 module.exports = Section;

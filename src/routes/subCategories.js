@@ -9,11 +9,14 @@ const {
 } = require('../controllers/subCategories')
 
 // middleawre
-const { protect , authorize } = require('../middleawre/auth');
+const { protect , authorize } = require('../middleware/auth');
+
+// Validation
+const {subCategoryValidationRules,subCategoryValidate} = require('../validation/subCategory');
 
 const router = express.Router();
 
-router.use(prtect)
+router.use(protect)
 
 router.get('/',authorize('admin'),getSubCategories);
 
@@ -21,9 +24,9 @@ router.get('/category/:categoryId',authorize('user','admin'),getSubCategoriesOfC
 
 router.get('/:id',authorize('admin'),getSubCategory);
 
-router.post('/create',authorize('admin'),createSubCategory);
+router.post('/create',authorize('admin'),subCategoryValidationRules(),subCategoryValidate,createSubCategory);
 
-router.put('/update/:id',authorize('admin'),updateSubCategory);
+router.put('/update/:id',authorize('admin'),subCategoryValidationRules(),subCategoryValidate,updateSubCategory);
 
 router.delete('/delete/:id',authorize('admin'),deleteSubCategory);
 
