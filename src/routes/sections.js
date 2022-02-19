@@ -8,24 +8,30 @@ const {
 } = require('../controllers/sections')
 
 // middlewares
-const { protect, authorize } = require('../middleware/auth')
+const {
+	protect,
+	authorize
+} = require('../middleware/auth')
 
 // Validation
-const {sectionValidationRules,sectionValidate} = require('../validation/section');
+const {
+	sectionValidationRules,
+	sectionValidate
+} = require('../validation/section');
 
 const router = express.Router();
 
 router.use(protect)
 
-router.get('/:courseId',authorize('user','admin'),getSections);
+router.get('/:courseId', authorize('user', 'admin'), getSections);
 
-router.get('/single/:id',authorize('user','admin'),getSection);
+router.get('/single/:id', authorize('user', 'admin'), getSection);
 
-router.post('/create/:courseId',authorize('user','admin'),sectionValidationRules(),sectionValidate,createSection);
+router.post('/create/:courseId', authorize('user', 'admin'), sectionValidationRules(), sectionValidate, createSection);
 
-router.put('/update/:id',authorize('user','admin'),sectionValidationRules(),sectionValidate,updateSection);
+router.put('/update/:id', authorize('user', 'admin'), sectionValidationRules(), sectionValidate, updateSection);
 
-router.delete('/delete/:id',authorize('user','admin'),deleteSection);
+router.delete('/delete/:id', authorize('user', 'admin'), deleteSection);
 
 
 module.exports = router

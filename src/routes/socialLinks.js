@@ -1,28 +1,34 @@
 const express = require('express');
 const {
-	getSocialLinks,	
+	getSocialLinks,
 	createSocialLinks,
 	updateSocialLinks,
 	deleteSocialLinks
 } = require('../controllers/socialLinks')
 
 // middlewares
-const { protect, authorize } = require('../middleware/auth')
+const {
+	protect,
+	authorize
+} = require('../middleware/auth')
 
 // Validation
-const {socialLinksValidationRules,socialLinksValidate} = require('../validation/socialLinks');
+const {
+	socialLinksValidationRules,
+	socialLinksValidate
+} = require('../validation/socialLinks');
 
 const router = express.Router();
 
 router.use(protect)
 
-router.get('/:userId',authorize('user','admin'),getSocialLinks);
+router.get('/:userId', authorize('user', 'admin'), getSocialLinks);
 
-router.post('/create/:lectureId',authorize('user','admin'),socialLinksValidationRules(),socialLinksValidate,createSocialLinks);
+router.post('/create/:lectureId', authorize('user', 'admin'), socialLinksValidationRules(), socialLinksValidate, createSocialLinks);
 
-router.put('/update/:id',authorize('user','admin'),socialLinksValidationRules(),socialLinksValidate,updateSocialLinks);
+router.put('/update/:id', authorize('user', 'admin'), socialLinksValidationRules(), socialLinksValidate, updateSocialLinks);
 
-router.delete('/delete/:id',authorize('user','admin'),deleteSocialLinks);
+router.delete('/delete/:id', authorize('user', 'admin'), deleteSocialLinks);
 
 
 module.exports = router

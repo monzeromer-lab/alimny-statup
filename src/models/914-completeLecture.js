@@ -7,9 +7,9 @@ const Lecture = require('./910-lecture');
 const CompleteLecture = database.define('complete_lecture', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	}
 });
 

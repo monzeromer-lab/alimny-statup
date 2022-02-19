@@ -6,17 +6,17 @@ const Lecture = require('./910-lecture');
 const PracticeTest = database.define('practice_test', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	question: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
 	correctAnswer: {
 		type: Sequelize.INTEGER,
-		allowNull:false
+		allowNull: false
 	},
 });
 

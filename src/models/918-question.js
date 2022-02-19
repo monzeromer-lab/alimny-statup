@@ -7,21 +7,21 @@ const Course = require('./4-course');
 const Question = database.define('questions', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	title: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
 	mediaPath: {
 		type: Sequelize.STRING,
-		allowNull:true
+		allowNull: true
 	},
 	body: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
 });
 

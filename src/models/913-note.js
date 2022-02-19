@@ -7,27 +7,27 @@ const Lecture = require('./910-lecture');
 const Note = database.define('note', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	note: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
 });
 
 
 User.hasMany(Note)
-Note.belongsTo(User,{
-	foreignKey:{
-		allowNull:false
+Note.belongsTo(User, {
+	foreignKey: {
+		allowNull: false
 	}
 })
 
-Note.belongsTo(Lecture,{
-	foreignKey:{
-		allowNull:false
+Note.belongsTo(Lecture, {
+	foreignKey: {
+		allowNull: false
 	}
 })
 

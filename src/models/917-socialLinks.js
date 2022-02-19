@@ -6,17 +6,17 @@ const User = require('./1-User');
 const SocialLinks = database.define('social_links', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	platform: {
-		type: Sequelize.ENUM('Facebook','Linkedin','Twitter','Personal Website'),
-		allowNull:false
+		type: Sequelize.ENUM('Facebook', 'Linkedin', 'Twitter', 'Personal Website'),
+		allowNull: false
 	},
 	link: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
 });
 

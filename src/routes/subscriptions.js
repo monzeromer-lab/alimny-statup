@@ -8,22 +8,25 @@ const {
 } = require('../controllers/subscription')
 
 // middlewares
-const { protect, authorize } = require('../middleware/auth')
+const {
+	protect,
+	authorize
+} = require('../middleware/auth')
 
 
 const router = express.Router();
 
 router.use(protect)
 
-router.get('/:userId',authorize('user','admin'),getSubscriptions);
+router.get('/:userId', authorize('user', 'admin'), getSubscriptions);
 
-router.get('/single/:id',authorize('user','admin'),getSubscription);
+router.get('/single/:id', authorize('user', 'admin'), getSubscription);
 
-router.post('/create/:courseId',authorize('user','admin'),createSubscription);
+router.post('/create/:courseId', authorize('user', 'admin'), createSubscription);
 
-router.put('/update/:id',authorize('user','admin'),updateSubscription);
+router.put('/update/:id', authorize('user', 'admin'), updateSubscription);
 
-router.delete('/delete/:id',authorize('user','admin'),deleteSubscription);
+router.delete('/delete/:id', authorize('user', 'admin'), deleteSubscription);
 
 
 module.exports = router

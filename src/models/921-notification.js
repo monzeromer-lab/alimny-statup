@@ -3,22 +3,24 @@ const database = require('../config/database');
 
 const User = require('./1-user');
 
-const Notification= database.define('Notifications', {
+const Notification = database.define('Notifications', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	text: {
 		type: Sequelize.BOOLEAN,
-		allowNull:false,
-		defaultValue:false
+		allowNull: false,
+		defaultValue: false
 	},
 });
 
 Notification.belongsTo(User)
 
-Notification.sync({force:true})
+Notification.sync({
+	force: true
+})
 
 module.exports = Notification

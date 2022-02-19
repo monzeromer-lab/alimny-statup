@@ -8,24 +8,30 @@ const {
 } = require('../controllers/reviews')
 
 // middlewares
-const { protect, authorize } = require('../middleware/auth')
+const {
+	protect,
+	authorize
+} = require('../middleware/auth')
 
 // Validation
-const {reviewValidationRules,reviewValidate} = require('../validation/reviews');
+const {
+	reviewValidationRules,
+	reviewValidate
+} = require('../validation/reviews');
 
 const router = express.Router();
 
 router.use(protect)
 
-router.get('/:courseId',authorize('user','admin'),getReviews);
+router.get('/:courseId', authorize('user', 'admin'), getReviews);
 
-router.get('/single/:id',authorize('user','admin'),getReview);
+router.get('/single/:id', authorize('user', 'admin'), getReview);
 
-router.post('/create/:courseId',authorize('user','admin'),reviewValidationRules(),reviewValidate,createReview);
+router.post('/create/:courseId', authorize('user', 'admin'), reviewValidationRules(), reviewValidate, createReview);
 
-router.put('/update/:id',authorize('user','admin'),reviewValidationRules(),reviewValidate,updateReview);
+router.put('/update/:id', authorize('user', 'admin'), reviewValidationRules(), reviewValidate, updateReview);
 
-router.delete('/delete/:id',authorize('user','admin'),deleteReview);
+router.delete('/delete/:id', authorize('user', 'admin'), deleteReview);
 
 
 module.exports = router

@@ -8,21 +8,24 @@ const {
 } = require('../controllers/CompleteLectures')
 
 // middlewares
-const { protect, authorize } = require('../middleware/auth')
+const {
+	protect,
+	authorize
+} = require('../middleware/auth')
 
 const router = express.Router();
 
 router.use(protect)
 
-router.get('/:userId',authorize('user','admin'),getCompleteLectures);
+router.get('/:userId', authorize('user', 'admin'), getCompleteLectures);
 
-router.get('/single/:id',authorize('user','admin'),getCompleteLecture);
+router.get('/single/:id', authorize('user', 'admin'), getCompleteLecture);
 
-router.post('/create/:lectureId',authorize('user','admin'),createCompleteLecture);
+router.post('/create/:lectureId', authorize('user', 'admin'), createCompleteLecture);
 
-router.put('/update/:id',authorize('user','admin'),updateCompleteLecture);
+router.put('/update/:id', authorize('user', 'admin'), updateCompleteLecture);
 
-router.delete('/delete/:id',authorize('user','admin'),deleteCompleteLecture);
+router.delete('/delete/:id', authorize('user', 'admin'), deleteCompleteLecture);
 
 
 module.exports = router

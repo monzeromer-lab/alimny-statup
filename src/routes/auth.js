@@ -9,23 +9,30 @@ const {
 } = require('../controllers/auth')
 
 // Auth middelware
-const { protect } = require('../middleware/auth')
+const {
+	protect
+} = require('../middleware/auth')
 
 // Validation
-const {loginValidationRules,registerValidationRules,loginValidate,registerValidate} = require('../validation/auth');
+const {
+	loginValidationRules,
+	registerValidationRules,
+	loginValidate,
+	registerValidate
+} = require('../validation/auth');
 
 const router = express.Router();
 
-router.post('/register',registerValidationRules(),registerValidate,register);
+router.post('/register', registerValidationRules(), registerValidate, register);
 
-router.post('/login',loginValidationRules(),loginValidate,login);
+router.post('/login', loginValidationRules(), loginValidate, login);
 
-router.post('/logout',protect,logout);
+router.post('/logout', protect, logout);
 
 router.post('/forgotPassword', forgotPassword);
 
-router.post('/resetPassword/:resetToken',resetPassword);
+router.post('/resetPassword/:resetToken', resetPassword);
 
-router.get('/confirm/:confirmationCode',verfiyEmail);
+router.get('/confirm/:confirmationCode', verfiyEmail);
 
 module.exports = router

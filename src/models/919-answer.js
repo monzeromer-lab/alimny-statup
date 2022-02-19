@@ -7,17 +7,17 @@ const Question = require('./918-question');
 const Answer = database.define('answer', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	answer: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
 	mediaPath: {
 		type: Sequelize.STRING,
-		allowNull:true
+		allowNull: true
 	}
 });
 
