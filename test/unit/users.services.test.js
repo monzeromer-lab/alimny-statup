@@ -7,19 +7,20 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-	await User.destroy({where:{}});
-	await User.bulkCreate([
-		{
-			id:1,
+	await User.destroy({
+		where: {}
+	});
+	await User.bulkCreate([{
+			id: 1,
 			name: 'ahmed',
-			email:'ahmed@mail.com',
+			email: 'ahmed@mail.com',
 			password: 'password',
 			phone: "0126975878"
 		},
 		{
-			id:2,
+			id: 2,
 			name: 'momen_d',
-			email:'meomen_d@mail.com',
+			email: 'meomen_d@mail.com',
 			password: 'password',
 			phone: "0126975878"
 		},
@@ -45,8 +46,8 @@ it('Should create a new user', async () => {
 
 it('Should get a single user if it exits', async () => {
 	const user = await userservices.getUser(1);
-	if(user) {
-		expect(user.name).toEqual('ahmed');	
+	if (user) {
+		expect(user.name).toEqual('ahmed');
 	}
 })
 
@@ -60,7 +61,7 @@ it('Should update an existing user', async () => {
 		name: "Mohmmed",
 		email: "mohmmed@email.com"
 	};
-	const user = await userservices.update(1,data);
+	const user = await userservices.update(1, data);
 	expect(user.name).toEqual("Mohmmed")
 	expect(user.email).toEqual("mohmmed@email.com")
 	expect(user.phone).toEqual(126975878)

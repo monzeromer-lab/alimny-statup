@@ -3,65 +3,69 @@ const Coupon = require('../models/6-coupon');
 module.exports = class CouponServices {
 	// get all Coupons
 	static async getCoupons(courseId) {
-		try{
-			const coupons = await Coupon.findAll({where:{courseId:courseId}});
+		try {
+			const coupons = await Coupon.findAll({
+				where: {
+					courseId: courseId
+				}
+			});
 			return coupons;
-		}catch(error) {
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	// get a single Coupon
 	static async getCoupon(couponId) {
-		try{
+		try {
 			const coupon = await Coupon.findByPk(couponId);
-			if(!coupon) {
+			if (!coupon) {
 				console.log('no Coupon with that id');
 				return false;
 			}
 			return coupon;
-		}catch(error) {
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	//store a Coupon
 	static async store(data) {
-		try{
+		try {
 			const coupon = await Coupon.create(data);
 			return coupon;
-		}catch(error) {
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	// update a Coupon
-	static async update(couponId,data) {
-		try{
+	static async update(couponId, data) {
+		try {
 			const oldCoupon = await Coupon.findByPk(couponId)
-			if(!oldCoupon) {
-				return  false;
+			if (!oldCoupon) {
+				return false;
 			}
 			const updatedCoupon = await oldCoupon.update(data);
 			return updatedCoupon;
-			
-		}catch(error) {
+
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	// delete a Coupon
 	static async delete(couponId) {
-		try{
+		try {
 			const coupon = await Coupon.findByPk(couponId);
-			if(!coupon) {
+			if (!coupon) {
 				return false;
 			}
 			await coupon.destroy();
 			return true;
-		}catch(error){
+		} catch (error) {
 			console.log(error);
 		}
 	}
-	
+
 }

@@ -3,65 +3,65 @@ const Category = require('../models/2-category');
 module.exports = class CategoryServices {
 	// get all Categorys
 	static async getCategories() {
-		try{
+		try {
 			const categories = await Category.findAll();
 			return categories;
-		}catch(error) {
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	// get a single Category
 	static async getCategory(categoryId) {
-		try{
+		try {
 			const category = await Category.findByPk(categoryId);
-			if(!category) {
+			if (!category) {
 				console.log('no Category with that id');
 				return false;
 			}
 			return category;
-		}catch(error) {
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	//store a Category
 	static async store(data) {
-		try{
+		try {
 			const category = await Category.create(data);
 			return category;
-		}catch(error) {
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	// update a Category
-	static async update(CategoryId,data) {
-		try{
+	static async update(CategoryId, data) {
+		try {
 			const oldCategory = await Category.findByPk(CategoryId)
-			if(!oldCategory) {
-				return  false;
+			if (!oldCategory) {
+				return false;
 			}
 			const updatedCategory = await oldCategory.update(data);
 			return updatedCategory;
-			
-		}catch(error) {
+
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	// delete a Category
 	static async delete(categoryId) {
-		try{
+		try {
 			const category = await Category.findByPk(categoryId);
-			if(!category) {
+			if (!category) {
 				return false;
 			}
 			const deleted = await category.destroy();
 			return true;
-		}catch(error){
+		} catch (error) {
 			console.log(error);
 		}
 	}
-	
+
 }

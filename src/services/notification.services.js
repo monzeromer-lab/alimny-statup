@@ -3,65 +3,69 @@ const Notification = require('../models/921-Notification');
 module.exports = class NotificationServices {
 	// get all Notifications
 	static async getNotifications(userId) {
-		try{
-			const notifications = await Notification.findAll({where:{userId:userId}});
+		try {
+			const notifications = await Notification.findAll({
+				where: {
+					userId: userId
+				}
+			});
 			return notifications;
-		}catch(error) {
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	// get a single Notification
 	static async getNotification(NotificationId) {
-		try{
+		try {
 			const notification = await Notification.findByPk(NotificationId);
-			if(!notification) {
+			if (!notification) {
 				console.log('no Notification with that id');
 				return false;
 			}
 			return notification;
-		}catch(error) {
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	//store a Notification
 	static async store(data) {
-		try{
+		try {
 			const notification = await Notification.create(data);
 			return notification;
-		}catch(error) {
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	// update a Notification
-	static async update(NotificationId,data) {
-		try{
+	static async update(NotificationId, data) {
+		try {
 			const oldNotification = await Notification.findByPk(NotificationId)
-			if(!oldNotification) {
-				return  false;
+			if (!oldNotification) {
+				return false;
 			}
 			const updatedNotification = await oldNotification.update(data);
 			return updatedNotification;
-			
-		}catch(error) {
+
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	// delete a Notification
 	static async delete(NotificationId) {
-		try{
+		try {
 			const notification = await Notification.findByPk(NotificationId);
-			if(!notification) {
+			if (!notification) {
 				return false;
 			}
 			await notification.destroy();
 			return true;
-		}catch(error){
+		} catch (error) {
 			console.log(error);
 		}
 	}
-	
+
 }

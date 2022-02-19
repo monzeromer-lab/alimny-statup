@@ -3,67 +3,67 @@ const Course = require('../models/4-course');
 module.exports = class CourseServices {
 	// get all Courses
 	static async getCourses() {
-		try{
+		try {
 			const courses = await Course.findAll();
 			return courses;
-		}catch(error) {
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	// get a single Course
 	static async getCourse(courseId) {
-		try{
+		try {
 			const course = await Course.findByPk(courseId);
-			if(!course) {
+			if (!course) {
 				console.log('no Course with that id');
 				return false;
 			}
 			return course;
-		}catch(error) {
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	//store a Course
 	static async store(data) {
-		try{
+		try {
 			const course = await Course.create(data);
 			return Course;
-		}catch(error) {
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	// update a Course
-	static async update(courseId,data) {
-		try{
+	static async update(courseId, data) {
+		try {
 			console.log(data)
 			const oldCourse = await Course.findByPk(courseId)
-			if(!oldCourse) {
-				return  false;
+			if (!oldCourse) {
+				return false;
 			}
 			const updatedCourse = await oldCourse.update(data);
 			return updatedCourse;
-			
-		}catch(error) {
+
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	// delete a Course
 	static async delete(courseId) {
-		try{
+		try {
 			const course = await Course.findByPk(courseId);
 			console.log(course)
-			if(!course) {
+			if (!course) {
 				return false;
 			}
 			await course.destroy();
 			return true;
-		}catch(error){
+		} catch (error) {
 			console.log(error);
 		}
 	}
-	
+
 }
