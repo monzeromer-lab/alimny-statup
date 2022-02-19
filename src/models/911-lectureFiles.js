@@ -6,20 +6,20 @@ const Lecture = require('./910-lecture');
 const LectureFiles = database.define('lectureFiles', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	name: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
-	path:{
+	path: {
 		type: Sequelize.STRING
 	}
 });
 
-LectureFiles.belongsTo(Lecture,{
+LectureFiles.belongsTo(Lecture, {
 	foreignKey: {
 		allowNull: false
 	}

@@ -9,17 +9,17 @@ const SubCategory = require('./3-subCategory');
 const Course = database.define('courses', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	name: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
 	description: {
 		type: Sequelize.TEXT,
-		allowNull:false
+		allowNull: false
 	},
 	cover: {
 		type: Sequelize.STRING,
@@ -28,22 +28,22 @@ const Course = database.define('courses', {
 		type: Sequelize.STRING,
 	},
 	level: {
-		type: Sequelize.ENUM('Beginner','Intermediate','Advanced','All levels'),
-		allowNull:false
+		type: Sequelize.ENUM('Beginner', 'Intermediate', 'Advanced', 'All levels'),
+		allowNull: false
 	},
 	status: {
-		type: Sequelize.ENUM('published','not published'),
-		allowNull:false,
-		defaultValue:'not published'
+		type: Sequelize.ENUM('published', 'not published'),
+		allowNull: false,
+		defaultValue: 'not published'
 	},
 	type: {
-		type: Sequelize.ENUM('free','paid'),
-		allowNull:false,
-		defaultValue:'paid'
+		type: Sequelize.ENUM('free', 'paid'),
+		allowNull: false,
+		defaultValue: 'paid'
 	},
 	price: {
 		type: Sequelize.FLOAT,
-		allowNull:false
+		allowNull: false
 	},
 	badge: {
 		type: Sequelize.STRING,
@@ -58,19 +58,19 @@ const Course = database.define('courses', {
 
 
 User.hasMany(Course);
-Course.belongsTo(User,{
+Course.belongsTo(User, {
 	foreignKey: {
-		allowNull:false
+		allowNull: false
 	}
 });
-Course.belongsTo(Category,{
+Course.belongsTo(Category, {
 	foreignKey: {
-		allowNull:false
+		allowNull: false
 	}
 });
-Course.belongsTo(SubCategory,{
+Course.belongsTo(SubCategory, {
 	foreignKey: {
-		allowNull:false
+		allowNull: false
 	}
 });
 

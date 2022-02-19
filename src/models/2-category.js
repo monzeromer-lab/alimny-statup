@@ -4,13 +4,13 @@ const database = require('../config/database');
 const Category = database.define('categories', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	name: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
 });
 

@@ -7,34 +7,34 @@ const Section = require('./5-section')
 const Lecture = database.define('Lectures', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	title: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
 	description: {
 		type: Sequelize.TEXT,
-		allowNull:false
+		allowNull: false
 	},
 	video: {
 		type: Sequelize.STRING,
-		allowNull:true
+		allowNull: true
 	},
 });
 
 Course.hasMany(Lecture);
-Lecture.belongsTo(Course,{
+Lecture.belongsTo(Course, {
 	foreignKey: {
-		allowNull:false
+		allowNull: false
 	}
 });
 Section.hasMany(Lecture);
-Lecture.belongsTo(Section,{
+Lecture.belongsTo(Section, {
 	foreignKey: {
-		allowNull:false
+		allowNull: false
 	}
 });
 module.exports = Lecture;

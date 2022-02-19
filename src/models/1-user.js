@@ -8,66 +8,68 @@ const database = require('../config/database');
 const User = database.define('users', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	name: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
 	email: {
 		type: Sequelize.STRING,
-		allowNull:false,
+		allowNull: false,
 		unique: true
 	},
 	phone: {
 		type: Sequelize.INTEGER,
-		allowNull:false
+		allowNull: false
 	},
 	bio: {
 		type: Sequelize.TEXT,
-		allowNull:true
+		allowNull: true
 	},
 	income: {
 		type: Sequelize.STRING,
-		allowNull:true
+		allowNull: true
 	},
 	role: {
-	    type: Sequelize.ENUM('user','admin'),
-	    defaultValue: 'user'
+		type: Sequelize.ENUM('user', 'admin'),
+		defaultValue: 'user'
 	},
 	status: {
-	    type: Sequelize.ENUM('Pending','Active'),
-	    defaultValue: 'Pending'
+		type: Sequelize.ENUM('Pending', 'Active'),
+		defaultValue: 'Pending'
 	},
 	password: {
-	    type: Sequelize.STRING,
-	    allowNull:false,
+		type: Sequelize.STRING,
+		allowNull: false,
 	},
 	resetPasswordToken: {
-	  	type: Sequelize.STRING,
+		type: Sequelize.STRING,
 	},
 	resetPasswordExpire: {
-	  	type: Sequelize.DATE
+		type: Sequelize.DATE
 	},
 	confirmationCode: {
-	  	type: Sequelize.STRING,
+		type: Sequelize.STRING,
 	},
 
 });
 
-User.prototype.getSignedJwtToken = function() {
-    return jwt.sign({id:this.id},process.env.JWT_SECRET,{
-      expiresIn:"30d"
-    })
-  }
+User.prototype.getSignedJwtToken = function () {
+	return jwt.sign({
+		id: this.id
+	}, process.env.JWT_SECRET, {
+		expiresIn: "30d"
+	})
+}
 
-User.prototype.matchPassword = async function(enteredPassword) {
-    return await bcrypt.compare(enteredPassword,this.password);
-  }
+User.prototype.matchPassword = async function (enteredPassword) {
+	return await bcrypt.compare(enteredPassword, this.password);
+}
 
-User.prototype.getResetPasswordToken = async function() {
+User.prototype.getResetPasswordToken = async function () {
 	// Genrate token
 	const resetToken = crypto.randomBytes(20).toString('hex');
 

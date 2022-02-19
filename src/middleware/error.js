@@ -1,7 +1,9 @@
 const ErrorResponse = require('../helpers/errorResponse')
 
-const errorHanlder = (err,req,res,next) => {
-	let error = {...err}
+const errorHanlder = (err, req, res, next) => {
+	let error = {
+		...err
+	}
 
 	error.message = err.message
 
@@ -9,28 +11,27 @@ const errorHanlder = (err,req,res,next) => {
 	console.log(err);
 
 	// Cast error
-	if(err.name = 'CastError') {
+	if (err.name = 'CastError') {
 		const message = `bootcamp doest'nt found with this id ${err.value}`
-		error = new ErrorResponse(message,404)
+		error = new ErrorResponse(message, 404)
 	}
 
 	// duplicate key
-	if(err.name === 'SequelizeUniqueConstraintError') {
+	if (err.name === 'SequelizeUniqueConstraintError') {
 		const message = 'duplicate filed value entered'
-		error = new ErrorResponse(message,400)
+		error = new ErrorResponse(message, 400)
 	}
 
 	// Validation errror
-	if(err.name == 'Validation error') {
+	if (err.name == 'Validation error') {
 		const message = Object.values(err.errors).map(val => val.message)
-		console.log('jh')
-		error = new ErrorResponse(message,400)
+		error = new ErrorResponse(message, 400)
 	}
 
 
 
 	res.status(err.statusCode || 500).json({
-		success:false,
+		success: false,
 		msg: err.message || "Server Error"
 	});
 }

@@ -6,32 +6,32 @@ const Course = require('./4-course')
 const Coupon = database.define('coupons', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	discountPer: {
 		type: Sequelize.INTEGER,
-		allowNull:false
+		allowNull: false
 	},
 	code: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
 	numberOfCoupons: {
 		type: Sequelize.INTEGER,
-		allowNull:false
+		allowNull: false
 	},
 	expires: {
 		type: Sequelize.DATE,
-		allowNull:false,
+		allowNull: false,
 	}
 });
 
 Course.hasMany(Coupon);
-Coupon.belongsTo(Course,{
+Coupon.belongsTo(Course, {
 	foreignKey: {
-		allowNull:false
+		allowNull: false
 	}
 });
 

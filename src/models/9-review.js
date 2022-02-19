@@ -6,24 +6,24 @@ const Course = require('./4-course')
 const Review = database.define('reviews', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	rating: {
 		type: Sequelize.INTEGER,
-		allowNull:false
+		allowNull: false
 	},
 	feedback: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
 });
 
 Course.hasMany(Review);
 Review.belongsTo(Course, {
 	foreignKey: {
-		allowNull:false
+		allowNull: false
 	}
 });
 

@@ -6,24 +6,24 @@ const Course = require('./4-course')
 const Section = database.define('sections', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	name: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
 	description: {
 		type: Sequelize.TEXT,
-		allowNull:true
+		allowNull: true
 	}
 });
 
 Course.hasMany(Section);
-Section.belongsTo(Course,{
+Section.belongsTo(Course, {
 	foreignKey: {
-		allowNull:false
+		allowNull: false
 	}
 })
 

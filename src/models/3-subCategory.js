@@ -6,20 +6,20 @@ const Category = require('./2-category')
 const SubCategory = database.define('subCategories', {
 	id: {
 		type: Sequelize.INTEGER,
-		autoIncrement:true,
+		autoIncrement: true,
 		allowNull: false,
-		primaryKey:true
+		primaryKey: true
 	},
 	name: {
 		type: Sequelize.STRING,
-		allowNull:false
+		allowNull: false
 	},
 });
 
 Category.hasMany(SubCategory);
-SubCategory.belongsTo(Category,{
+SubCategory.belongsTo(Category, {
 	foreignKey: {
-		allowNull:false
+		allowNull: false
 	}
 });
 
