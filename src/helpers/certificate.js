@@ -7,18 +7,35 @@ class Certificate {
         this.Creator = creator
         this.Code = code
     }
-    doc = new PDFdocument()
+
+    doc = new PDFdocument({
+        autoFirstPage: false,
+        permissions: {
+            modifying: false,
+            documentAssembly: false
+        }
+    })
 
     generate() {
 
+        // is there's a better way of doing this instead of this waste of memory?
         let {
             Title = this.Title,
-            Creator = this.Creator,
-            CreationDate = new Date().getFullYear(),
-            Author = "Alimny"
+                Creator = this.Creator,
+                CreationDate = new Date().getFullYear(),
+                Author = "Alimny"
         } = this.doc.info
+        
 
-        this.doc.text("sup how r u?", 11, 11).fontSize(188).fillColor("black", 8)
+        this.doc.addPage({
+            layout: "landscape",
+        })
+
+        this.doc.on("pageAdded", () => {
+            this.doc.text("sup how r u?", 11, 11).fontSize(188).fillColor("black", 8)
+            this.doc.image("../../public/images/alimnyCert.png")
+        })
+
 
         return this
 
